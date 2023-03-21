@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Purchases | Home</title>
+    <link rel='stylesheet' href='../stylesheets/login-register.css'/>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-header">
+            <h1>Welcome!</h1>
+            <p>Please fill the form with your data</p>
+        </div>
+            
+        <div class="login-body">
+            <div  id="form-container">
+                <!--  action="http://localhost:3000/register"   -->
+
+                <div class="login-generic-camp">
+                    <input type="text" id="name" name="name" required placeholder="name" >
+                </div>
+                <p id="warning-0" class="warning" hidden>* This is not a valid name.</p>
+                <div class="login-generic-camp">
+                    <input type="email" id="email-1" name="email1" required placeholder="introduce your email" >
+                </div>
+                <p id="warning-1" class="warning" hidden>* This is not a valid email.</p>
+                <p id="warning-2" class="warning" hidden>* This email is already registred.</p>
+                <div class="login-generic-camp">
+                    <input type="email" id="email-2" name="email2" required placeholder="repeat your email" >
+                </div>
+                <p id="warning-3" class="warning" hidden>* Both emails fields must match.</p>
+                
+                <div class="login-generic-camp">
+                    <input type="password" id="password-1" name="pass1" required placeholder="choose a password" >
+                </div>
+                <div class="login-generic-camp">
+                    <input type="password" id="password-2" name="pass2" required placeholder="repeat your password" >
+                </div>
+                <p id="warning-4" class="warning" hidden >* The passwords don't match</p> 
+
+                                
+                <div class="login-generic-camp login-btn-container">
+                    <input type="submit" class="btn disabled" id="btn-submit"  value="Send">
+                    <br>
+                    <p>If you already have an account <a href="./index.html"> login here.</a></p>
+                </div>
+
+            </div>
+        </div>  
+    </div>
+    <script src="../scripts/register.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Purchases | Participants</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+    <link rel='stylesheet' type="text/css" href='../stylesheets/participants.css'/>   
+
+    <!-- <link rel='stylesheet' type="text/css" href='/home/facu/Escritorio/programacion/proyectosPropios/blog/public/stylesheets/userMain.css'/>   -->
+</head>
+<body>
+
+    <div class="container" id="partContainer">
+        
+        <div class="head">
+            <h2> Participants</h2>
+        </div>
+
+        <hr>
+
+        <div class="input-container">
+            <h4>Add Regiter User</h4>
+            <div class="input-participant">
+            <label>User: </label><br>
+            <input type="text" id="inputPartUser" placeholder="Add the user email"><br>
+            <button class="btn btn-add" id="btn-inputPartUser">Add <i class="fa fa-users"></i>+</button>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <h4>Add Not Regiter User</h4>
+            <div class="input-participant">
+            <label>Invited:</label><br>
+            <input type="text" id="inputPartInvited" placeholder="Add invited name"><br>
+            <button class="btn btn-add" id="btn-inputPartInvited">Add <i class="fa fa-users"></i>+</button>
+            </div>
+        </div>
+        <div id="participants-container">
+            <!-- <div class="participant"><i class="fas fa-times delete-icon"></i><span>facuntano</span></div> -->
+        </div>
+        <hr>
+
+
+        <!-- esto se llena desde JS segun los nombres ingresados-->
+        
+      
+    </div>
+
+    <button class="btn-back" type="button" id="back-button" >
+        Back
+    </button>
+
+    <script src="../scripts/participants.js"></script>
+</body>
+</html>
