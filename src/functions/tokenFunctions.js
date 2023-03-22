@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config() //esta linea lee el archivo .env y por ende puedo usar las variables que defini en dicho archivo.
 const jwt = require('jsonwebtoken')
 const {passVerify} = require('./passwordFunctions')
 const {getUserbyEmail} = require('../DB/crud/find')

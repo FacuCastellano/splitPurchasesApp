@@ -101,41 +101,46 @@ async function addBillToUserRegisteredAndViceversa(billStringId,emailNewUser){
 //addBillToUserAndViceversa
 //addBillToUserAndViceversa(new ObjectId('6408f146af1cd25b725535d6'),'ruben@gmail.com')
 
-// funcion para agregar un "purchase", despues lo tengo que agregara Bill.. 
-// NOTA:aca no agrego los participantes al gasto eso lo hago en otro momento, ni si quiera quien hace el gasto pq puede q no sea participe. 
-async function createPurchase(concept,amount,payerEmail){
+//esta funcion sirve para argregar un purchase a un bill,
 
+purchase12 = {
+        "concept":"asado",
+        "amount":175263,
+        "payer":"6410d3579f927194a5335203",
+        "participants":["6410d3579f927194a5335203","6410d3579f927194a5335205","tose","gon"]
+    }
+
+console.log(JSON.stringify(purchase12))
+
+async function addPurchaseToBill(strBillId,purchaseToAdd){
     try{
-        const billId = new ObjectId("6408f3ae02c6bb1455cce958")
-        const creatorId = await getUserObjectIdbyEmail(payerEmail.toLowerCase())
+        const billId = new ObjectId(strBillId)
+        const{concept,amount,payer,participants} = purchaseToAdd
+        
         const purchase = {
-            concept: concept.toLowerCase(),
+            concept: concept,
             amount: amount,
-            payer: creatorId
+            payer: payer,
+            participants:participants
         }
         await Bill.updateOne({_id:billId}, {$addToSet: {purchases: purchase }})
-
+        return true
     }catch(err){
         console.log("ha ocurrido el siguiente error en la funcion addBillToUser.")
         console.log(err)
+        return false
     }  
 }
 
-//createPurchase("criollos",450,"facu@gmail.com")
-
-
-//createPurchase("asado",15200,"facu@gmail.com")
 
 
 module.exports = {
     addBillToUserRegisteredAndViceversa,
-    createPurchase,
+    addPurchaseToBill,
     addBillToUserRegiteredByStringId
 }
 
-// async function main(email){
-//     const user = await getUserObjectIdbyEmail(email)
-//     console.log(user)
+
 
 // }
 

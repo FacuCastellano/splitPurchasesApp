@@ -1,7 +1,7 @@
 const {Router} = require('express')
 const {tokenValidator} = require('../functions/tokenFunctions.js')
 const {validationUserInBill,getBillByStringId,validationRegisterUser} = require('../DB/crud/find')
-const {addBillToUserRegisteredAndViceversa} = require('../DB/crud/update')
+const {addBillToUserRegisteredAndViceversa,addPurchaseToBill} = require('../DB/crud/update')
 const User = require('../DB/models/User.js')
 const router = Router()
 const mongoose = require('mongoose')
@@ -105,7 +105,35 @@ router.post("/add-user-regitered-to-bill-participants", async (req,res)=>{
     } 
 })
 
-
+// agrego un nuevo purchase a la Bill.
+router.post("/add-purchase-to-bill", async (req,res)=>{
+    try{
+        const {accessToken,billStringId,purchaseToAdd} = await req.body
+        const validationResult = await tokenValidator(accessToken)
+        if(validationResult){
+            const userId = validationResult.SubId
+            const checkValidation = await validationUserInBill(userId,billStringId)
+            if(checkValidation){
+                const add = await addPurchaseToBill(billStringId,purchaseToAdd)
+                if(add){
+                    res.status(200)
+                }else{
+                    res.status(500)
+                }
+            } else {
+                res.send("the user is not in the bill")
+            }
+            
+        }else{
+            res.send("User not found")
+        }
+        res.end()
+    
+    } catch {
+        res.send(null)
+        res.end()
+    } 
+})
 
 
 

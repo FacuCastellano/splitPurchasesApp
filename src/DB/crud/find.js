@@ -181,7 +181,7 @@ async function validationRegisterUser(strUser) {
         const user = await getUserByStringId(strUser)
         
         if(user){
-            return user.name
+            return [user.name,user.id]
         } else {
             return strUser+" (Inv)"
         }

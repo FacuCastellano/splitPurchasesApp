@@ -25,8 +25,8 @@ const billSchema = new Schema ({
     purchases: [{
         concept: { type: String },
         amount: { type: Number },
-        payer: { type: Schema.Types.ObjectId, ref: 'User' },
-        participants: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+        payer: { type: Schema.Types.Mixed },
+        participants: [{ type: Schema.Types.Mixed}]
       }]
 },{ minimize: false })
 

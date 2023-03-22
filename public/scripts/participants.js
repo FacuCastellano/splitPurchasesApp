@@ -40,9 +40,8 @@ function updateParticipantsView(){
         } else {    
             participantsContainer.innerHTML = ''  
             data.billParticipants.forEach(participant => {
-                createDivParticipant(participant)
+                createDivParticipant(participant[0])
             });
-            
         }
     })
     .catch(error => {
