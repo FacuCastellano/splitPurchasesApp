@@ -52,13 +52,14 @@ function updateParticipantsHeader(){
     })
 }
 //defino la funcion que me habilita/deshabilita el boton submit de un 
+
 function inputsValidation(){
     if ((concept.value !== '' ) && (verifyFloatable(amount.value)) &&(amount.value !=='')&& (pWPoptions.value !=='')){
         btnAddPurchase.classList.remove('inactive')
-        btnAddPurchase.disbled = false
+        btnAddPurchase.disabled = false
     }else {
         btnAddPurchase.classList.add('inactive')
-        btnAddPurchase.disbled = false
+        btnAddPurchase.disabled = true
     }
 }
 
@@ -107,6 +108,7 @@ function addPurchaseToDB(){
     .then(res=>{
         if (res.status === 200){
             console.log("purchase cargado")
+            showAllPurchases()
         } else{
             console.log("error en la carga del purchase.")
         }
@@ -180,7 +182,13 @@ async function showAllPurchases(){
         body: JSON.stringify({"accessToken":token,'billStringId':billStringId})
     })
     const dataRes = await res.json()
-    dataRes.purchasesStringId.forEach(purchaseId => showPurchase(purchaseId) )
+    console.log("aca van los gastos!")
+    console.log(dataRes.purchasesStringId)
+    for(index in dataRes.purchasesStringId){
+        const purchase = dataRes.purchasesStringId[index]
+        await showPurchase(purchase) //este await es clave para que la visualizacion de los gastos sea en orden cronologico (en realidad en orden del index que estan guardados en la BD)
+    }
+    //dataRes.purchasesStringId.forEach(async(purchaseId) => await showPurchase(purchaseId) )  //esto funciona pero los crea en cualquier orden. forEach no asegura ejecutar en el orden que estan los elementos en el array.
     return null
 }
 
