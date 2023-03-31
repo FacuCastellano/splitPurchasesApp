@@ -72,6 +72,21 @@ async function getUserByStringId(stringId){
     }    
 }
 
+//esta funcion me devuelve el nombre del usuario usando su ID como string (que es lo q voy a almacenar en el localStorage)
+async function getUserNameByStringId(stringId){
+    try{
+        const userObjectId = new ObjectId(stringId)
+        const user = await User.findOne({_id:userObjectId})
+        return user.name //esta me devuelve todo el documento del usuario.
+    }catch(err){
+        //aca pueden pasar varior errores, lo importante es q devuelva (null) cuando se le pasa algo que no es un StingId valido o existente.
+        console.log("ha ocurrido el siguiente error en la funcion getUserbyEmail.")
+        console.log(err)
+        return null
+    }    
+}
+
+
 async function getUserNameByObjectId(ObjectId){
     try{
         const user = await User.findOne({_id:ObjectId})
@@ -193,6 +208,77 @@ async function validationRegisterUser(strUser) {
 }
 
 
+//creo una funcion en la que intruciendo el stringid de una bill, me vuelve una lista de stringID de cada purchase de la bill.
+async function getPurchasesStrIdInBill(stringIdBill) {
+    try{
+        const purchasesStringsId =[]
+        const billObjectId = new ObjectId(stringIdBill)
+        const bill = await Bill.findOne({_id:billObjectId})
+        const purchases = bill.purchases
+        purchases.forEach(p =>{
+            purchasesStringsId.push(p.id)
+        })
+        return purchasesStringsId
+
+    }catch(err){
+        console.log("ha ocurrido el siguiente error en la funcion getPurchasesStrIdInBill")
+        console.log(err)
+    }
+}
+
+//creo una funcion en la que intruciendo el stringid de una bill, y el stringid de un purchase, me devuelve una lista de los participantes de ese purchase.
+async function getParticipantsOfPurchase(stringIdBill,stringIdPurchase) {
+    try{
+        //const participants =[]
+        const billObjectId = new ObjectId(stringIdBill)
+        let participants = null
+        const bill = await Bill.findOne({_id:billObjectId})
+        for (const purchase in bill.purchases) {
+            if (bill.purchases[purchase].id == stringIdPurchase) {
+                participants = bill.purchases[purchase].participants
+                return participants
+            }
+        }
+        return participants
+
+    }catch(err){
+        console.log("ha ocurrido el siguiente error en la funcion getParticipantsOfPurchase")
+        console.log(err)
+    }
+}
+
+//creo una funcion en la que intruciendo el stringid de una bill, y el stringid de un purchase, me devuelve un objeto con el concept, el amount y el payer de la purchase.
+async function getPurchaseInfo(stringIdBill,stringIdPurchase) {
+    try{
+        //const participants =[]
+        const billObjectId = new ObjectId(stringIdBill)
+        const data = {"concept": null, "amount":null,"payer":null}
+        const bill = await Bill.findOne({_id:billObjectId})
+        for (const purchase in bill.purchases) {
+            if (bill.purchases[purchase].id == stringIdPurchase) {
+                data.concept = bill.purchases[purchase].concept
+                data.amount = bill.purchases[purchase].amount
+                data.payer = bill.purchases[purchase].payer
+                
+                return data
+            }
+        }
+        return participants
+
+    }catch(err){
+        console.log("ha ocurrido el siguiente error en la funcion getParticipantsOfPurchase")
+        console.log(err)
+    }
+}
+
+
+
+
+
+
+
+
+
 
 module.exports = {
     getUserByObjectId,
@@ -207,11 +293,15 @@ module.exports = {
     getUserByStringId,
     validationRegisterUser,
     getTotalBillsbyUserId,
-    checkUserExistenceByEmail
+    checkUserExistenceByEmail,
+    getPurchasesStrIdInBill,
+    getPurchaseInfo,
+    getParticipantsOfPurchase,
+    getUserNameByStringId
 }
 
 // async function main(){
-//     const a = await checkUserExistenceByEmail("Facu@gmail.com")
+//     const a = await getPurchaseInfo("6411146b768422404be13ee0","6424960f526a473a62ee609a")
 //     console.log("aca va a: ",a)
 //     if(a){
 //         console.log("usuario valido")

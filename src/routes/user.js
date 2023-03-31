@@ -1,6 +1,6 @@
 const {Router} = require('express')
 const {tokenValidator} = require('../functions/tokenFunctions.js')
-const {getUserNameByObjectId,getBillsbyUserId,getTotalBillsbyUserId} = require('../DB/crud/find')
+const {getUserNameByObjectId,getBillsbyUserId,getTotalBillsbyUserId,getUserNameByStringId} = require('../DB/crud/find')
 const {createBill} = require('../DB/crud/create')
 const User = require('../DB/models/User.js')
 const router = Router()
@@ -31,6 +31,7 @@ router.post("/get-user-main-info", async (req,res)=>{
     }
     res.end()
 })
+
 //esta ruta me devuelve la cantidad total del bills del usuario (para obtener las paginas totales)
 router.post("/get-user-total-bills", async (req,res)=>{
     const {accessToken} = await req.body
@@ -77,6 +78,8 @@ router.post("/create-new-bill", async (req,res)=>{
     }
     res.end()
 })
+
+
 
 
 //Ojo tengo que exportarlo asi, si le pongo --> module.exports = {router} me tira error no se pq, es decir no tengo que poner llaves.

@@ -103,14 +103,14 @@ async function addBillToUserRegisteredAndViceversa(billStringId,emailNewUser){
 
 //esta funcion sirve para argregar un purchase a un bill,
 
-purchase12 = {
-        "concept":"asado",
-        "amount":175263,
-        "payer":"6410d3579f927194a5335203",
-        "participants":["6410d3579f927194a5335203","6410d3579f927194a5335205","tose","gon"]
-    }
+// purchase12 = {
+//         "concept":"asado",
+//         "amount":175263,
+//         "payer":"6410d3579f927194a5335203",
+//         "participants":["6410d3579f927194a5335203","6410d3579f927194a5335205","tose","gon"]
+// }
 
-console.log(JSON.stringify(purchase12))
+//console.log(JSON.stringify(purchase12))
 
 async function addPurchaseToBill(strBillId,purchaseToAdd){
     try{
@@ -131,34 +131,65 @@ async function addPurchaseToBill(strBillId,purchaseToAdd){
         return false
     }  
 }
+//esta funcion es un toggle del participante, es decir si existe lo elimina y si no existe lo agrega.
+async function toggleParticipantInPurchase(strBillId,strPurchaseId,strParticipantId){
+    try{
+        
+        const billObjectId = new ObjectId(strBillId)
+        const purchaseObjectId = new ObjectId(strPurchaseId)
+
+        let newParticipants = null
+
+        const bill = await Bill.findOne({"_id":billObjectId})
+
+        for(index in bill.purchases){      
+            if(bill.purchases[index].id === strPurchaseId){
+                let participants = bill.purchases[index].participants
+                // console.log("1) participants: ")
+                // console.log(participants)
+            
+                // console.log(" valor condicion: ")
+                // console.log(participants.includes(strParticipantId))
+
+                if(participants.includes(strParticipantId)){
+                    //el participante si esta --> lo elimino
+                    newParticipants = participants.filter(personId =>  personId != strParticipantId)
+                } else {
+                    //el participante no esta --> lo creo
+                    newParticipants = [...participants, strParticipantId]
+                }
+
+                await Bill.updateOne(
+                    {"_id":billObjectId,"purchases._id":purchaseObjectId}  //busco el documento con el billObject, dentro de este busco el atributo purchase, cuyo_id sea puchases objectID
+                    ,
+                    {
+                        $set:{
+                            
+                            "purchases.$.participants":newParticipants //el $ es para meterme dentro "purchases", no se pq no es un solo (.) pero bueno
+                        }
+                    }
+                )
+                return true
+            } 
+        }
+        return false   
+        
+    }catch(err){
+        console.log("ha ocurrido el siguiente error en la funcion toggleParticipantInPurchase")
+        console.log(err)
+    }
+}
+
+// async function main(){
+//     //await toggleParticipantInPurchase('6411146b768422404be13ee0','6424976e526a473a62ee60a1','6410d3579f927194a5335203')
+//     await toggleParticipantInPurchase('6411146b768422404be13ee0','6424976e526a473a62ee60a1','pedrito')
+// }
 
 
 
 module.exports = {
     addBillToUserRegisteredAndViceversa,
     addPurchaseToBill,
-    addBillToUserRegiteredByStringId
+    addBillToUserRegiteredByStringId,
+    toggleParticipantInPurchase
 }
-
-
-
-// }
-
-// const BillId1 = "6411146b768422404be13ee0"
-// const NewUserMail = "magda@gmail.com"
-
-
- 
-
-// async function main2(billStringId,emailNewUser){
-//     const a = await addBillToUserRegisteredAndViceversa(billStringId,emailNewUser)
-//     console.log(a)
-// }
-
-
-
-// main2(BillId1,NewUserMail)
-
-
-
-
