@@ -1,7 +1,9 @@
 const token = localStorage.getItem('accessToken')
 const billStringId = localStorage.getItem('billStringId')
-const backBtn =document.getElementById('back-button')
+//const backBtn = document.getElementById('back-button')
 const varBillTitle = document.getElementById('varBillTitle')
+const homeBtn = document.getElementById('home-button')
+
 
 //envio la peticion al servidor para obtener el nombre de la Bill.
 const url = 'http://localhost:3000/get-bill-title'
@@ -30,6 +32,10 @@ fetch(url,{
 })
 
 
-backBtn.addEventListener('click',()=>{
+// backBtn.addEventListener('click',()=>{
+//     location.href = './myBills.html'
+// })
+
+homeBtn.addEventListener('click',()=>{
     location.href = './myBills.html'
 })
