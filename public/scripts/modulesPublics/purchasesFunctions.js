@@ -35,9 +35,17 @@ function addParticipantTopWP(name,id){
 //esta funcion recibe un numero y lo convierte en centavos, se va a trabajar con centavos para evitar errores de redondeo y antes de mostrar todo se pasa a 
 function convertToCents(priceString){
     const price = parseFloat(priceString)
-    return price.toFixed(2)*100
+    
+    return parseInt(price.toFixed(2)*100)
 }
-
+//esta funcion resetea los inputs.
+function resetInputs(){
+    concept.value = ''
+    amount.value = ''
+    pWPoptions.value = ''
+    ticksGenericos = document.querySelectorAll('genericTick')
+    ticksGenericos.forEach(tick => tick.classList.add('activate'))
+}
 
 //esta funcion busca en el array usersArray el string y devuelve el name correspondiente
 

@@ -1,7 +1,9 @@
 const {Router} = require('express')
 const {tokenValidator} = require('../functions/tokenFunctions.js')
-const {validationUserInBill,getBillByStringId,validationRegisterUser,getPurchasesStrIdInBill,getParticipantsOfPurchase,getPurchaseInfo} = require('../DB/crud/find')
-const {addBillToUserRegisteredAndViceversa,addPurchaseToBill,toggleParticipantInPurchase} = require('../DB/crud/update')
+const {calculateTransfers} = require('../functions/severancePayFunctions.js')
+
+const {validationUserInBill,getBillByStringId,validationRegisterUser,getPurchasesStrIdInBill,getParticipantsOfPurchase,getPurchaseInfo,getBalancesByBillStringId} = require('../DB/crud/find')
+const {addBillToUserRegisteredAndViceversa,addPurchaseToBill,toggleParticipantInPurchase,makeBalance} = require('../DB/crud/update')
 const User = require('../DB/models/User.js')
 const router = Router()
 const mongoose = require('mongoose')
@@ -108,13 +110,15 @@ router.post("/add-user-regitered-to-bill-participants", async (req,res)=>{
 // agrego un nuevo purchase a la Bill.
 router.post("/add-purchase-to-bill", async (req,res)=>{
     try{
-        const {accessToken,billStringId,purchaseToAdd} = await req.body
+        const {accessToken,billStringId,purchaseToAdd} = await req.body        
+        purchaseToAdd.amount = parseInt((parseFloat(purchaseToAdd.amount)*100).toFixed(2)) //toFix() devuelve un string --> por eso lo tengo que transformar a entero de nuevo.
         const validationResult = await tokenValidator(accessToken)
         if(validationResult){
             const userId = validationResult.SubId
             const checkValidation = await validationUserInBill(userId,billStringId)
             if(checkValidation){
                 const add = await addPurchaseToBill(billStringId,purchaseToAdd)
+                await makeBalance(billStringId)
                 if(add){
                     res.status(200)
                 }else{
@@ -247,6 +251,61 @@ router.post("/toggle-participant-in-purchase", async (req,res)=>{
         res.end()
     } 
 })
+
+
+//obtengo un objeto con el concept,amount y payer un purchase especifico en una bill. tengo que pasa el stringId de la bill y el stringId del purchase.
+router.post("/get-bill-balances", async (req,res)=>{
+    try{
+        const {accessToken,billStringId} = await req.body
+        const validationResult = await tokenValidator(accessToken)
+        if(validationResult){
+            const userId = validationResult.SubId
+            const checkValidation = await validationUserInBill(userId,billStringId)
+            if(checkValidation){
+                const data = await getBalancesByBillStringId(billStringId)
+                res.status(200)
+                res.send(JSON.stringify(data))
+            } else {
+                res.send("the user is not in the bill")
+            }
+            
+        }else{
+            res.send("User not found")
+        }
+        res.end()
+    
+    } catch {
+        res.send(null)
+        res.end()
+    } 
+})
+router.post("/get-bill-transfers", async (req,res)=>{
+    try{
+        const {accessToken,billStringId} = await req.body
+        const validationResult = await tokenValidator(accessToken)
+        if(validationResult){
+            const userId = validationResult.SubId
+            const checkValidation = await validationUserInBill(userId,billStringId)
+            if(checkValidation){
+                const balances = await getBalancesByBillStringId(billStringId)
+                const transfers = calculateTransfers(balances)
+                res.status(200)
+                res.send(JSON.stringify(transfers))
+            } else {
+                res.send("the user is not in the bill")
+            }
+            
+        }else{
+            res.send("User not found")
+        }
+        res.end()
+    
+    } catch {
+        res.send(null)
+        res.end()
+    } 
+})
+
 
 
 

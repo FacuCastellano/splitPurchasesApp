@@ -17,17 +17,22 @@ const billSchema = new Schema ({
     ],
     //participants es una lista de ObjectID en donde cada ObjectID hace referencia un documento del model (collection) "User"
     participants: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: 'User'
-        }
+      { type: Schema.Types.Mixed}
     ],
-    purchases: [{
+    purchases: [
+      {
         concept: { type: String },
         amount: { type: Number },
         payer: { type: Schema.Types.Mixed },
         participants: [{ type: Schema.Types.Mixed}]
-      }]
+      }
+    ],
+    balances: {
+      type: Schema.Types.Mixed, // con esto inicializo un objeto vacio que despues lo voy a ir llenando.
+      default: {}
+    }
+        
+    
 },{ minimize: false })
 
 model('Bill',billSchema )

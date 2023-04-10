@@ -7,7 +7,7 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 //const { Schema, Types: { ObjectId } } = require('mongoose');
 const {getUserObjectIdbyEmail,getUserByStringId} = require('./find.js')
-const {addBillToUserRegiteredByStringId} = require('./update')
+const {addBillToUserRegiteredByStringId,addParticipantToBalances} = require('./update')
 const {createPassHash} = require('../../functions/passwordFunctions')
 
 
@@ -40,8 +40,11 @@ async function createBill(billTitle,userStringId){
             admins: [creatorId],
             participants: [creatorId]
         })
-        await addBillToUserRegiteredByStringId(bill.id,userStringId)
+
+        await addBillToUserRegiteredByStringId(bill.id,userStringId) 
         await bill.save()
+        //primero tengo que ejecutar bill.save(), por que sino addParticipantToBalances, no lo va a encontrar en la BD.
+        await addParticipantToBalances(bill._id,userStringId)
         
         return true
 

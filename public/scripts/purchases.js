@@ -108,6 +108,7 @@ function addPurchaseToDB(){
     .then(res=>{
         if (res.status === 200){
             console.log("purchase cargado")
+            resetInputs()
             showAllPurchases()
         } else{
             console.log("error en la carga del purchase.")
@@ -126,9 +127,6 @@ btnAddPurchase.addEventListener("click",()=>{
 //esta funcion recibe el stringId como argumento, y visualiza el purchase, dandole algunas funcionalidades.
 //6424960f526a473a62ee609a
 async function showPurchase(purchaseStringId){
-    console.log("hola desde show purchase ")
-    console.log(billStringId)
-    console.log(purchaseStringId)
     const res1 = await fetch("http://localhost:3000/get-purchase-basic-info",{
         method: 'POST',
         headers: {
@@ -159,7 +157,7 @@ async function showPurchase(purchaseStringId){
     // console.log(concept,amount,payer)
     // console.log(allBillParticipants)
     // console.log(purchaseParticipants)
-    createPurchaseRow(purchaseStringId,concept,amount,payer,allBillParticipants,purchaseParticipants)
+    createPurchaseRow(purchaseStringId,concept,parseFloat(amount/100),payer,allBillParticipants,purchaseParticipants)
 
 }
 
@@ -193,10 +191,11 @@ async function showAllPurchases(){
 }
 
 //ejecuto todas las funciones.
+
 updateParticipantsHeader()
 inputsValidation()
 showAllPurchases()
-
+resetInputs()
 
 
 

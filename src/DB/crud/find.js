@@ -66,7 +66,7 @@ async function getUserByStringId(stringId){
         return user //esta me devuelve todo el documento del usuario.
     }catch(err){
         //aca pueden pasar varior errores, lo importante es q devuelva (null) cuando se le pasa algo que no es un StingId valido o existente.
-        console.log("ha ocurrido el siguiente error en la funcion getUserbyEmail.")
+        console.log("ha ocurrido el siguiente error en la funcion getUserByStringId.")
         console.log(err)
         return null
     }    
@@ -80,7 +80,7 @@ async function getUserNameByStringId(stringId){
         return user.name //esta me devuelve todo el documento del usuario.
     }catch(err){
         //aca pueden pasar varior errores, lo importante es q devuelva (null) cuando se le pasa algo que no es un StingId valido o existente.
-        console.log("ha ocurrido el siguiente error en la funcion getUserbyEmail.")
+        console.log("ha ocurrido el siguiente error en la funcion getUserNameByStringId.")
         console.log(err)
         return null
     }    
@@ -92,8 +92,9 @@ async function getUserNameByObjectId(ObjectId){
         const user = await User.findOne({_id:ObjectId})
         return user.name //esta me devuelve todo el documento del usuario.
     }catch(err){
-        console.log("ha ocurrido el siguiente error en la funcion getUserbyEmail.")
+        console.log("ha ocurrido el siguiente error en la funcion getUserNameByObjectId.")
         console.log(err)
+        return null
     }    
 }
 //esta funcion me devuelve el Bill.concept segun el ObjectID de la Bill.
@@ -102,7 +103,7 @@ async function getBillByObjectId(ObjectId){
         const bill = await Bill.findOne({_id:ObjectId})
         return bill //esta me devuelve todo el documento del usuario.
     }catch(err){
-        console.log("ha ocurrido el siguiente error en la funcion getUBillConceptByObjectId.")
+        console.log("ha ocurrido el siguiente error en la funcion getBillByObjectId.")
         console.log(err)
     }    
 }
@@ -138,11 +139,13 @@ async function getBillsbyUserId(UserStringId,page = 0){
         console.log(bills)
         return bills //esta me devuelve todo el documento del usuario.
     }catch(err){
-        console.log("ha ocurrido el siguiente error en la funcion getBillbyObjectId.")
+        console.log("ha ocurrido el siguiente error en la funcion getBillsbyUserId. aca salta")
         console.log(err)
         
     }  
 }
+
+
 //esta funcion devuelve la cantidad total de bills del usuario.
 async function getTotalBillsbyUserId(UserStringId){
     try{
@@ -272,8 +275,27 @@ async function getPurchaseInfo(stringIdBill,stringIdPurchase) {
 }
 
 
+async function getBalancesByBillStringId(billStringId){
+    try{
+        const billObjectId = new ObjectId(billStringId)
+        const bill = await Bill.findOne({_id:billObjectId})        
+        const balances = bill.balances
+        //agrego el nombre del participante para enviarlo con los balances.
+        const participants = Object.keys(balances)
+        for(index in participants){
+           const participantName = await getUserNameByStringId(participants[index])
+           balances[participants[index]].name = participantName
+        }
 
-
+        return balances
+    }catch(err){
+        //aca pueden pasar varior errores, lo importante es q devuelva (null) cuando se le pasa algo que no es un StingId valido o existente.
+        console.log("ha ocurrido el siguiente error en la funcion getBalancesByBillStringId.")
+        console.log(err)
+        
+        return null
+    }    
+}
 
 
 
@@ -297,17 +319,21 @@ module.exports = {
     getPurchasesStrIdInBill,
     getPurchaseInfo,
     getParticipantsOfPurchase,
-    getUserNameByStringId
+    getUserNameByStringId,
+    getBalancesByBillStringId
 }
 
+
+
+// // getBillsbyUserId("6426fa6505afb8908d7d62df")
 // async function main(){
-//     const a = await getPurchaseInfo("6411146b768422404be13ee0","6424960f526a473a62ee609a")
+//     const a = await getBalancesByBillStringId("642ee90c04fa72677d6a9c29")
 //     console.log("aca va a: ",a)
 //     if(a){
 //         console.log("usuario valido")
 //     }else {
 //         console.log("invitado")
 //     }
-// }
+//  }
 
-// main()
+//  main()

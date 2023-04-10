@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 //const Schema = mongoose.Schema
 const ObjectId = mongoose.Types.ObjectId
 //const { Schema, Types: { ObjectId } } = require('mongoose');
-const {getUserObjectIdbyEmail} = require('./find.js')
+const {getUserObjectIdbyEmail,getUserbyEmail} = require('./find.js')
 
 
 
@@ -17,10 +17,15 @@ async function addUserRegisteredToBill(billStringId,emailNewUser){
 
         //const billId = new ObjectId('6408f146af1cd25b725535d6')
         //const email = emailNewUser.toLowerCase()
-        const userId = await getUserObjectIdbyEmail(emailNewUser)
-        if(userId){
+        const user = await getUserbyEmail(emailNewUser)
+        const userObjectId = user._id
+        const userStringId = user.id
+        console.log(userStringId )
+        if(user){
+
             const billObjectId = new ObjectId(billStringId)
-            await Bill.updateOne({_id:billObjectId}, {$addToSet: {participants: userId}}) //el $addToSet es similar al push.. esto seria agregar al set participants el UserId (ojo!! en un set los elementos no se pueden duplicar)
+            await Bill.updateOne({_id:billObjectId}, {$addToSet: {participants: userObjectId }}) //el $addToSet es similar al push.. esto seria agregar al set participants el UserId (ojo!! en un set los elementos no se pueden duplicar)
+            await addParticipantToBalances(billObjectId ,userStringId)
             return true // si devuelve true es pq lo registro o pq ya existia. 
         } else {
             return false //si devuelve false es pq el mail del usuario no esta en la BD
@@ -32,6 +37,25 @@ async function addUserRegisteredToBill(billStringId,emailNewUser){
     }  
 
 }
+
+//funcion para agregar como participante a un usuario invitado  (que NO esta registrado en la APP) a un Gasto (Bill)
+async function addUserInvitedToBill(billStringId,nameUserInvited){
+
+    try{
+
+        const billObjectId = new ObjectId(billStringId)
+        await Bill.updateOne({_id:billObjectId}, {$addToSet: {participants: nameUserInvited}}) //el $addToSet es similar al push..
+        await addParticipantToBalances(billObjectId,nameUserInvited)
+        return true // si devuelve true es pq lo registro o pq ya existia. 
+    
+
+    }catch(err){
+        console.log("ha ocurrido el siguiente error en la funcion addUserInvitedToBill.")
+        console.log(err)
+    }  
+
+}
+
 //funcion para agregar el ObjectId de un nuevo Gasto (Bill) en un User registrado, pero con el UserStringId(que es lo que obtengo automaticamente del token validado.).
 async function addBillToUserRegiteredByStringId(billStringId,userStringId){
     
@@ -169,6 +193,7 @@ async function toggleParticipantInPurchase(strBillId,strPurchaseId,strParticipan
                         }
                     }
                 )
+                makeBalance(strBillId)
                 return true
             } 
         }
@@ -183,13 +208,103 @@ async function toggleParticipantInPurchase(strBillId,strPurchaseId,strParticipan
 // async function main(){
 //     //await toggleParticipantInPurchase('6411146b768422404be13ee0','6424976e526a473a62ee60a1','6410d3579f927194a5335203')
 //     await toggleParticipantInPurchase('6411146b768422404be13ee0','6424976e526a473a62ee60a1','pedrito')
-// }
+// } 
+
+async function addParticipantToBalances(billObjectId, participantStrId) {
+    //const billObjectId = new ObjectId(strBillId)
+
+    await Bill.updateOne(
+      { _id: billObjectId },
+      {
+        $set: {
+          [`balances.${participantStrId}`]: { mustPay: 0, payed: 0, balance: 0 }, // tengo que usar "$set" y seteo un nuevo atributo (como plus me da que no puedo agregar dos participantes iguales, pq la segunda vez reemplaza, y por ende elimina la primera.), ($push es para arrays, no para objetos.), con claves los [] en la definicion de la key
+        },
+      },
+      { upsert: false }
+    );
+}
+
+//esta funcion hace el balance
+async function makeBalance(strBillId){
+    try{
+        
+        const billObjectId = new ObjectId(strBillId)
+        const bill = await Bill.findOne({"_id":billObjectId})
+        const allPurchases = bill.purchases
+        const n = allPurchases.length
+        const balances = {}
+        //seteo los balances en 0
+        for(index in bill.participants){
+            balances[bill.participants[index].toString()] = {'mustPay':0,'payed':0,'balance':0}
+        }
+        //en cada purchase voy sumando lo que le corresponde pagar a cada uno y asigno el amount al payer, cuando termine este ciclo for voy a tener el mustPay y el payed
+        for (index in allPurchases){
+            const purchase = allPurchases[index]
+            const amount = purchase.amount
+            const payer = purchase.payer
+            const purchaseParticipants = purchase.participants
+            
+            if(amount > 0 && purchaseParticipants.length > 0){
+                const averageAmount = amount / purchaseParticipants.length
+                
+                
+                balances[payer]['payed'] += amount
+                for(partIndex in purchaseParticipants){
+                    const participant = purchaseParticipants[partIndex]
+                    balances[participant]['mustPay'] += averageAmount //asd
+                }
+
+
+            }else{
+                //aca deberia arreglar mejor esto
+                console.log(`${purchase.concept} no se tuvo en cuenta por ser un amount no valido o por no estar asignado a ningun parcipante`)
+            }
+        }
+        //en cada participante calculo el balance final. 
+        for(index in bill.participants){
+            balances[bill.participants[index]]['balance'] = balances[bill.participants[index]]['payed']-balances[bill.participants[index]]['mustPay']
+        }
+        //reemplazo el balance previo por el nuevo.
+        await Bill.updateOne(
+            { _id: billObjectId },
+            {
+              $set: {
+                [`balances`]: balances, // tengo que usar "$set" y seteo un nuevo atributo (como plus me da que no puedo agregar dos participantes iguales, pq la segunda vez reemplaza, y por ende elimina la primera.), ($push es para arrays, no para objetos.), con claves los [] en la definicion de la key
+              },
+            },
+            { upsert: false }
+        )
+
+        bill.save()
+
+    }catch(err){
+        
+    } 
+
+}
 
 
 
-module.exports = {
+
+
+async function showBalances(strBillId){
+    const billObjectId = new ObjectId(strBillId)
+    const bill = await Bill.findOne({"_id":billObjectId})
+    
+    console.log(bill.balances)
+}
+
+module.exports = { 
     addBillToUserRegisteredAndViceversa,
     addPurchaseToBill,
     addBillToUserRegiteredByStringId,
-    toggleParticipantInPurchase
+    toggleParticipantInPurchase,
+    addParticipantToBalances,
+    makeBalance
 }
+
+async function main(){
+   await makeBalance('642dbb629289377523383fac')
+}
+
+main()
