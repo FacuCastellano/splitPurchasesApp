@@ -3,17 +3,23 @@ const token = localStorage.getItem('accessToken')
 let totalBills //va a ser numero con la cantidad de Bills del usuario.
 let totalPages
 let bills //esto va ser un array con los Id de los Bills, y los conceptos. 
-const n = 7 //cantidad de escritos a mostrar por pagina.
+const n = 5 //cantidad de escritos a mostrar por pagina.
 let page = 0 //la primera pagina es la 0.
 const ArrowL = document.getElementById('leftButton') 
 const ArrowR = document.getElementById('rightButton')
 
-const backBtn = document.getElementById('back-button') 
+const logoutBtn = document.getElementById('logout-button') 
 const billContainer = document.getElementById('bills-container')
+const divCreator = document.createElement('div')
+divCreator.classList.add('bill', 'creator')
+divCreator.id = 'create-button'
+divCreator.innerHTML = `Create New + <i class="fa-light fa-note></i>`
+divCreator.addEventListener('click',()=>{
+    location.href = './createNewBill.html'
+})
 
-
-backBtn.addEventListener('click',()=>{
-    location.href = './userMain.html'
+logoutBtn.addEventListener('click',()=>{
+    location.href = './index.html'
 })
 
 //genero una funcion para que me cree los elementos bill para mostrar.
@@ -47,7 +53,8 @@ fetch(url,{
         //console.log("el token es un objeto vacio {}")
         location.href = './index.html'
     } else {
-        billContainer.innerHTML =''
+        billContainer.innerHTML ='' 
+        billContainer.appendChild(divCreator)
         bills = data.bills
         bills.forEach(bill => {
             createBill(bill)

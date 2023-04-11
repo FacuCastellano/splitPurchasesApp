@@ -47,7 +47,7 @@ submitButton.addEventListener('click',() => {
                 //console.log("Accesso Aprobado, el Token se ha enviado.")
                 localStorage.setItem('accessToken',data)
                 //sessionStorage.setItem('accessToken',data)
-                location.href = './userMain.html'
+                location.href = './myBills.html'
             } else {
                 //console.log("Accesso Denegado.")
                 alert("User or Password incorrect! please try again!")

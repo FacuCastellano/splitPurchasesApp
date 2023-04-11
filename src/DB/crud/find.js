@@ -126,7 +126,7 @@ async function getBillByStringId(StringId){
 // en funcion del userID (el ID como string) y la pagina q solicito.
 async function getBillsbyUserId(UserStringId,page = 0){
     try{
-        const n = 7 //estos son las cuentas a mostrar, en cada pagina.
+        const n = 5 //estos son las cuentas a mostrar, en cada pagina.
         const bills = []
         const userObjectId = new ObjectId(UserStringId)
         const user = await User.findOne({_id:userObjectId})

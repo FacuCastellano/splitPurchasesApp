@@ -1,7 +1,8 @@
 :root{
-    --body-bg-color:rgb(118, 155, 223);
-    --maindiv-bg-color:rgb(96, 170, 192);
-    --content-bg-color:rgb(221, 214, 238);
+    --body-bg-color: steelblue  ;
+   
+    --botton-bg-color: rgb(211, 234, 241) ;
+    --content-bg-color:rgba(0, 0, 0, 0.4) ;
 }
 *{
     margin: 0;
@@ -10,7 +11,7 @@
 }
 
 html{
-    background-color: var(--maindiv-bg-color);
+
     height: 100vh;
     display: flex;
     align-items: center;
@@ -18,21 +19,64 @@ html{
 
 }
 body{
+    background-color:var(--body-bg-color);
     display:flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    font-family: 'Roboto',sans-serif;
+    color:white;
+    
 }
 
 .mainContainer{
-    width: 80vw;;
+    width: 400px;
+    background-color: var(--content-bg-color);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    /*border: 2px blue solid;*/
+
+}
+.container-A{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+hr{
+    border: 1px solid white;
+    width: calc(100% - 4px);
+}
+
+.container-B{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+}
+/*los iconos*/
+.icon-container{
+    font-size: x-large;
+}
+.fa-sign-out-alt:active, .fa-bars:active{
+    scale:0.96;
+    color: var(--botton-bg-color);
+}
+.icon-container{
+    padding: 8px 15px;
+    /* border: solid 1px white;
+    border-radius:5px; */
 }
 
 /*los div vacios los hago como flechas.*/
+.fa-sign-out-alt{
+    transform: rotateY(180deg);
+}
+
 
 .arrow{
     width: 0;
@@ -44,35 +88,35 @@ body{
 
 .arrowLeft{
 
-    border-top: 50px solid transparent;
-    border-bottom: 50px solid transparent;
-    border-right:70px solid black;
-    margin-right: 25px;
-    margin-left: 10px;
+    border-top: 20px solid transparent;
+    border-bottom:20px solid transparent;
+    border-right:28px solid var(--botton-bg-color);
+    margin-right: 10px;
+    margin-left: 20px;
     transition: all 0.3s;
 }
 .arrowLeft:hover{
-    border-right:70px solid rgb(241, 234, 135);
+    border-right:28px solid var(--body-bg-color);
 }
 
 .arrowRight{
-    border-top: 50px solid transparent;
-    border-bottom: 50px solid transparent;
-    border-left: 70px solid black;
-    margin-left: 25px;
-    margin-right: -10px;
+    border-top: 20px solid transparent;
+    border-bottom:20px solid transparent;
+    border-left:28px solid  var(--botton-bg-color);
+    margin-left: 10px;
+    margin-right: 20px;
     transition: all 0.3s;
 }
 .arrowRight:hover{
-    border-left:70px solid rgb(241, 234, 135);
+    border-left-color:var(--body-bg-color);
 }
 /*estilo de las flechas inactivas.*/
 /*flecha izq*/
  .inactive.arrowLeft{
-    border-right:70px solid rgb(206, 201, 201);
+    border-right-color: rgb(133, 129, 129);
 }
 .inactive.arrowLeft:hover{
-    border-right:70px solid tomato;
+    border-right-color: tomato;
     cursor: pointer;
 }
 .inactive.arrowLeft:active{
@@ -80,10 +124,10 @@ body{
 }
 /*flecha der*/
 .inactive.arrowRight{
-    border-left:70px solid rgb(206, 201, 201);
+    border-left-color: rgb(133, 129, 129);
 }
 .inactive.arrowRight:hover{
-    border-left:70px solid tomato;
+    border-left-color: tomato;
     cursor: pointer;
 }
 .inactive.arrowRight:active{
@@ -93,10 +137,10 @@ body{
 /*estilo de los escritos.*/
 
 .bills-container{
-width: 350px;
-height: 500px;
+width: 70%;
+height: 400px;
 /*border: 2px solid black;*/
-margin:20px;
+margin:0px 20px;
 
 display: flex;
 flex-direction: column;
@@ -109,16 +153,16 @@ text-overflow: ellipsis;
 }
 
 .bill {
-
+color:black;
 margin: 10px 0px;
-padding: 15px 0px;
-background-color:rgb(163, 216, 175);
-border: 1px solid white;
+padding: 5px 0px;
+background-color:var(--botton-bg-color);
 border-radius: 5px;
 width: 100%;
 height: 50px;
-text-align: center;
-vertical-align: middle;
+display: flex;
+align-items: center;
+justify-content: center;
 font-family: Arial, sans-serif;
 font-size: 18px;
 transition: All 0.1s;
@@ -126,30 +170,22 @@ transition: All 0.1s;
 }
   
 .bill:hover {
-background-color: rgb(197, 230, 154);
+background-color: var(--body-bg-color);
 cursor: pointer;
+color:white;
 }
 
-
-/*Boton Back.*/
-
-.btn-back{
-    font-size: 19px;
-    padding: 15px 20px;
-    margin-top:20px;
-    width: 200px;
-    height:100%;
-    border: solid 4px white;
-    border-radius: 12px;
-    background-color: rgb(154, 206, 124);
-   
+.creator{
+    background-color:var(--body-bg-color);
+    color:white;
+    font-size: large;
+    font-weight: 600;
+    border: none;
 }
-
-.btn-back:active{
-    transform:scale(0.95)
+.creator:hover{
+     background-color:rgb(184, 226, 184);
+    color:rgb(44, 48, 39);
 }
-
-.btn-back:hover {
-    background-color: rgb(197, 230, 154);
-    cursor: pointer;
-    }
+.creator:active{
+    scale:0.98;
+}

@@ -7,31 +7,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Split Purchases | My Bills</title>
     <link rel='stylesheet' href='../stylesheets/myBills.css'/>
+	<script src="https://kit.fontawesome.com/ef08a0a447.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
     <div class="mainContainer">
 
-		<div class="arrowContainer">
-			<div class="arrow arrowLeft inactive" id="leftButton"></div>
-		</div>	
-		
-			<div class="bills-container" id="bills-container">
- 
+
+		<div class="container-A">
+
+			<div class="icon-container">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+            
+            <h2>     
+                <p>Home</p> <!-- como es un archivo EJS y desde el servidor le pase la userData, puedo acceder a esta de esta forma.-->
+            </h2>
+            
+            <div class="icon-container" id="logout-button">
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
+		</div>
+
+		<hr>
+		<div class="container-B">
+
+			<div class="arrowContainer">
 				
-					<!-- esto se llenada desde myBills.js -->
-						
+				 <div class="arrow arrowLeft inactive" id="leftButton"></div> 
+			</div>	
+			
+				<div class="bills-container" id="bills-container">
+	 
+					<!-- <div class="bill" id="create-button">Create new +</div> -->
+					
+						<!-- esto se llenada desde myBills.js -->
+							
+				</div>
+		
+			<div class="arrowContainer">
+				<div class="arrow arrowRight inactive" id="rightButton" ></div>
 			</div>
-	
-		<div class="arrowContainer">
-			<div class="arrow arrowRight inactive" id="rightButton" ></div>
-		</div>	
+
+		</div>
+
+		
 
     </div>
-
-	<button class="btn-back" type="button" id="back-button" >
-		Back 
-	</button>
 	
     <script src="../scripts/myBills.js"></script>
 </body>
