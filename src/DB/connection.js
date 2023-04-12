@@ -17,3 +17,5 @@ db.on('error',err=>{
     console.log("Ha ocurrido un error")
     console.log(err)
 })
+
+module.exports = db;

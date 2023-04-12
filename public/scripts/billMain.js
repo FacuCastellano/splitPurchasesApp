@@ -3,6 +3,24 @@ const billStringId = localStorage.getItem('billStringId')
 //const backBtn = document.getElementById('back-button')
 const varBillTitle = document.getElementById('varBillTitle')
 const homeBtn = document.getElementById('home-button')
+const deleteBtn = document.getElementById('delete-button')
+//creo la interaccion con el muenu desplegable.
+const menuBtn = document.getElementById('menu-button')
+const menu = document.getElementById('menu')
+menuElementContainer= document.getElementById('menu-elements-container')
+menuElementContainer.style.display = 'none'
+
+menuBtn.addEventListener('click',()=>{
+    menu.classList.remove('inactive')
+    menuElementContainer.style.display = 'block'
+})
+menu.addEventListener('mouseleave',()=>{
+    menu.classList.add('inactive')
+    menuElementContainer.style.display = 'none'
+})
+
+
+
 
 
 //envio la peticion al servidor para obtener el nombre de la Bill.
@@ -38,4 +56,38 @@ fetch(url,{
 
 homeBtn.addEventListener('click',()=>{
     location.href = './myBills.html'
+})
+
+function deleteBill() {
+
+    const url = 'http://localhost:3000/delete-bill'
+    fetch(url,{
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"accessToken":token,'billStringId':billStringId})
+    })
+    .then(()=>{
+        location.href = './myBills.html'
+    }) 
+    .catch(error => {
+        console.error('Error en la funcion deleteBill()', error);
+    })
+}
+
+
+function confirmDelete() {
+    // Muestra un mensaje de confirmación
+    const confirmMsg = "WARNING!\nIf you continue, the current bill will be deleted of all participants acount.\nIf you are nopt sure should click in 'Cancel'";
+    const result = confirm(confirmMsg);
+  
+    // Si el usuario hizo clic en "Aceptar"
+    if (result) {
+        deleteBill();
+    }
+}
+
+deleteBtn.addEventListener('click',()=>{
+    confirmDelete()
 })

@@ -36,6 +36,7 @@ body{
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    position:relative;
 
 }
 .container-A{
@@ -110,6 +111,22 @@ hr{
 .arrowRight:hover{
     border-left-color:var(--body-bg-color);
 }
+
+.optionsMenu{
+    background-color: rgb(241, 219, 190);
+    height: 250px;
+    width:150px;
+    /* z-index: 1; */
+    position: absolute;
+    top:0;
+    left:0;
+    transition: all 0.3s;
+}
+.optionsMenu.inactive{
+    /* height: 0px; */
+    width:0px;
+}
+
 /*estilo de las flechas inactivas.*/
 /*flecha izq*/
  .inactive.arrowLeft{

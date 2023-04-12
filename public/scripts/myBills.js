@@ -7,13 +7,14 @@ const n = 5 //cantidad de escritos a mostrar por pagina.
 let page = 0 //la primera pagina es la 0.
 const ArrowL = document.getElementById('leftButton') 
 const ArrowR = document.getElementById('rightButton')
-
+const menuBtn = document.getElementById('menu-button')
+const menu = document.getElementById('menu')
 const logoutBtn = document.getElementById('logout-button') 
 const billContainer = document.getElementById('bills-container')
 const divCreator = document.createElement('div')
 divCreator.classList.add('bill', 'creator')
 divCreator.id = 'create-button'
-divCreator.innerHTML = `Create New + <i class="fa-light fa-note></i>`
+divCreator.innerHTML = `Create New Bill &nbsp; <i class="fas fa-receipt">&nbsp;</i><i class="fas fa-plus"></i>`;
 divCreator.addEventListener('click',()=>{
     location.href = './createNewBill.html'
 })
@@ -21,6 +22,14 @@ divCreator.addEventListener('click',()=>{
 logoutBtn.addEventListener('click',()=>{
     location.href = './index.html'
 })
+
+menuBtn.addEventListener('click',()=>{
+    menu.classList.remove('inactive')
+})
+menu.addEventListener('mouseleave',()=>{
+    menu.classList.add('inactive')
+})
+
 
 //genero una funcion para que me cree los elementos bill para mostrar.
 function createBill(bill){

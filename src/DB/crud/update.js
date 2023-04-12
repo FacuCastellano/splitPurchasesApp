@@ -227,7 +227,6 @@ async function addParticipantToBalances(billObjectId, participantStrId) {
 //esta funcion hace el balance
 async function makeBalance(strBillId){
     try{
-        
         const billObjectId = new ObjectId(strBillId)
         const bill = await Bill.findOne({"_id":billObjectId})
         const allPurchases = bill.purchases
@@ -303,8 +302,3 @@ module.exports = {
     makeBalance
 }
 
-async function main(){
-   await makeBalance('642dbb629289377523383fac')
-}
-
-main()
