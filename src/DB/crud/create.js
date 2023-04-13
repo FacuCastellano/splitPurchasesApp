@@ -36,7 +36,8 @@ async function createBill(billTitle,userStringId,userAlias){
         const creatorId = new ObjectId(userStringId)
         
         const bill= new Bill({
-            concept: billTitle.toLowerCase(),
+            
+            concept: billTitle.trim().toLowerCase(),
             admins: [creatorId],
             participants: [creatorId]
         })

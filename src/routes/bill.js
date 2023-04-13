@@ -2,7 +2,7 @@ const {Router} = require('express')
 const {tokenValidator} = require('../functions/tokenFunctions.js')
 const {calculateTransfers} = require('../functions/severancePayFunctions.js')
 
-const {validationUserInBill,getBillByStringId,validationRegisterUser,getPurchasesStrIdInBill,getParticipantsOfPurchase,getPurchaseInfo,getBalancesByBillStringId} = require('../DB/crud/find')
+const {validationUserInBill,getBillByStringId,validationRegisterUser,getPurchasesStrIdInBill,getParticipantsOfPurchase,getPurchaseInfo,getBalancesByBillStringId,checkAliasAndUserAreNotInBill} = require('../DB/crud/find')
 const {addBillToUserRegisteredAndViceversa,addPurchaseToBill,toggleParticipantInPurchase,makeBalance} = require('../DB/crud/update')
 const {deleteBill,deleteParticipantFromBill} = require('../DB/crud/delete')
 const User = require('../DB/models/User.js')
@@ -79,35 +79,45 @@ router.post("/get-bill-participants", async (req,res)=>{
 router.post("/add-user-registered-to-bill-participants", async (req,res)=>{
     try{
         const {accessToken,billStringId,emailUserToAdd,aliasUserToAdd} = await req.body
+        
+        
         if(accessToken && billStringId && emailUserToAdd && aliasUserToAdd){
             const validationResult = await tokenValidator(accessToken)
             if(validationResult){
                 const userId = validationResult.SubId
                 const checkValidation = await validationUserInBill(userId,billStringId)
                 if(checkValidation){
-                    const add = await addBillToUserRegisteredAndViceversa(billStringId,emailUserToAdd,aliasUserToAdd)
-                    if(add){
+                    console.log('aca vamos')
+                    console.log(await checkAliasAndUserAreNotInBill(billStringId,emailUserToAdd,aliasUserToAdd))
+                    if(await checkAliasAndUserAreNotInBill(billStringId,emailUserToAdd,aliasUserToAdd)){
+
+                        const add = await addBillToUserRegisteredAndViceversa(billStringId,emailUserToAdd,aliasUserToAdd)
+                        if(add){
                         console.log("The user with the email: ",emailUserToAdd," was added to this bill.")
                         res.status(200)
-
-                    } else {
+                        res.send(JSON.stringify({"UserAndAliasAvaible":true}))
+                        } else {
                         console.log("Error!\nThe user with the email: ",emailUserToAdd," was not added to this bill.")
                         res.status(500)
+                        }
+
+                    }else{
+                        //si entro aca es pq el alias o el mail ya estan en la bill.
+                        console.log('entre a este. no deberia pasar nada.')
+                        res.status(401) //primero tengo q setear el status antes que el send. pq sino lo envio con el estatus por defecto q es 200.
+                        res.send(JSON.stringify({"UserAndAliasAvaible":false}))
                     }
-                    
                 } else {
                     res.send("the user is not in the bill")
                 }
-
             }else{
                 res.send("User not found")
             }
+
         }else {
             res.status(400)
         }
         res.end()
-        
-        
     
     } catch {
         res.send(null)

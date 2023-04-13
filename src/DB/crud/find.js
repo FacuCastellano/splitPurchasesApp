@@ -67,6 +67,19 @@ async function getUserbyEmail(email){
         console.log(err)
     }    
 }
+//esta funcion me devuelve el usuario ObjectId  usando su mail (recordar que el mail es unico)
+async function getUserObjectIdByEmail(email){
+    try{
+        const user = await User.findOne({email:email})
+        return user._id //esta me devuelve todo el documento del usuario.
+    }catch(err){
+        console.log("ha ocurrido el siguiente error en la funcion getUserObjectIdByEmail.")
+        console.log(err)
+    }    
+}
+
+
+
 //getUserbyEmail("facu@gmail.com")
 
 //esta funcion me devuelve el usuario completo usando su ID como string (que es lo q voy a almacenar en el localStorage)
@@ -203,6 +216,27 @@ async function validationUserInBill(userStringId,billStringId) {
     }
 }
 
+
+//si el alias No esta usado, y el mail No esta agregado con otro alias, devuelve true, sino false.
+async function checkAliasAndUserAreNotInBill(billStringId,emailUserToAdd,aliasUserToAdd){
+    try{
+        
+        const billObjectId = new ObjectId(billStringId)
+        const userObjectId = await getUserObjectIdByEmail(emailUserToAdd)
+        const bill = await Bill.findOne({_id:billObjectId})
+
+        if(bill.participants.includes(userObjectId) || Object.values(bill.alias).includes(aliasUserToAdd)){
+            return false
+        } else {
+            return true
+        }
+
+    }catch(err){
+        console.log("ha ocurrido el siguiente error en la funcion validationUserRegiterAndAliasInBill.")
+        console.log(err)
+    }
+
+}
 //aca valido si el estring cooresponde a un userId(string) o si es un string de un invitado, en todo caso devuelvo el user.name o el mismo string de invitado con un "nombre (Inv)""
 //
 async function validationRegisterUser(strUser) {
@@ -313,6 +347,7 @@ async function getBalancesByBillStringId(billStringId){
 
 
 
+
 module.exports = {
     getUserByObjectId,
     getUserObjectIdbyEmail,
@@ -332,7 +367,8 @@ module.exports = {
     getParticipantsOfPurchase,
     getUserNameByStringId,
     getBalancesByBillStringId,
-    getUserStringIdbyEmail
+    getUserStringIdbyEmail,
+    checkAliasAndUserAreNotInBill
 }
 
 

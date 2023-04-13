@@ -43,7 +43,7 @@ function updateParticipantsView(){
             const alias = data.billParticipantsAlias
             participantsContainer.innerHTML = ''  
             data.billParticipantsAndMails.forEach(participant => {
-                const participantAlias = alias[participant[0]]
+                const participantAlias = alias[participant[0]].charAt(0).toUpperCase() + alias[participant[0]].slice(1).toLowerCase()
                 const participantMail = participant[1]
                 createDivParticipant(participantAlias,participantMail)
             });
@@ -57,9 +57,11 @@ function updateParticipantsView(){
 updateParticipantsView()
 
 btnAddPartUser.addEventListener('click',()=>{
-    const emailUserToAdd = inputPartUser.value
-    const aliasUserToAdd = inputPartInvited.value
-
+    const emailUserToAdd = inputPartUser.value.trim().toLowerCase()
+    const aliasUserToAdd = inputPartInvited.value.trim().toLowerCase()
+    
+    //const aliasUserToAdd = inputPartInvited.value.trim().charAt(0).toUpperCase()+ inputPartInvited.value.trim().slice(1).toLowerCase()
+    
     if(emailUserToAdd && aliasUserToAdd){
         const url = 'http://localhost:3000/add-user-registered-to-bill-participants'
         fetch(url,{
@@ -72,6 +74,10 @@ btnAddPartUser.addEventListener('click',()=>{
         .then(res => {
             //console.log("aca va la data\n",data)
             //si el token expiro data = object{} (objeto vacio), por lo que la lista de keys sera de longitud 0, por ende uso esto para saber si el token expiro.
+            if(res.status === 401){
+                //aca en teoria entro si el usuario (el mail) ya esta registrado o si el alias ya esta registrado.
+                alert(`The email or alias, has already registered in this bill`)
+            }
             if(res.status === 500){
                 //console.log("el token es un objeto vacio {}")
                 alert(`Error!\nThe user with the email: ${emailUserToAdd}, was not added to the bill.\n It's probably that this mail is not registered in the app.`)

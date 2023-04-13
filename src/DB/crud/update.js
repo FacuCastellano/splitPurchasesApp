@@ -17,7 +17,7 @@ async function addUserRegisteredToBill(billStringId,emailNewUser){
 
         //const billId = new ObjectId('6408f146af1cd25b725535d6')
         //const email = emailNewUser.toLowerCase()
-        const user = await getUserbyEmail(emailNewUser)
+        const user = await getUserbyEmail(emailNewUser.toLowerCase())
         const userObjectId = user._id
         const userStringId = user.id
         console.log(userStringId )
@@ -86,7 +86,7 @@ async function addBillToUserRegitered(billStringId,emailNewUser){
     try{
         //const billId = new ObjectId('6408f146af1cd25b725535d6')
         //const email = emailNewUser.toLowerCase()
-        const userId = await getUserObjectIdbyEmail(emailNewUser)
+        const userId = await getUserObjectIdbyEmail(emailNewUser.toLowerCase())
         if(userId){
             const billObjectId = new ObjectId(billStringId)
             await User.updateOne({_id:userId}, {$addToSet: {bills: billObjectId}}) //el $addToSet es similar al $push.. esto seria agregar al set participants el UserId (ojo!! en un set los elementos no se pueden duplicar)
@@ -107,12 +107,13 @@ async function addBillToUserRegitered(billStringId,emailNewUser){
 async function addBillToUserRegisteredAndViceversa(billStringId,emailNewUser,aliasUserToAdd){
    
     try{
-        const userStringId = await getUserStringIdbyEmail(emailNewUser)
+        const email = emailNewUser.toLowerCase()
+        const userStringId = await getUserStringIdbyEmail(email)
         const billObjectId = new ObjectId(billStringId)
         
         await Bill.updateOne({_id:billObjectId}, {$set: {[`alias.${userStringId}`]: aliasUserToAdd}})
         
-        const email = emailNewUser.toLowerCase()
+        
         const a = await addUserRegisteredToBill(billStringId,email)
         const b = await addBillToUserRegitered(billStringId,email)
         if (a === true && b === true){

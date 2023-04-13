@@ -10,7 +10,8 @@ backBtn.addEventListener('click',()=>{
 
 
 btnCreate.addEventListener('click',async ()=>{
-
+    const alias = inputAdminAlias.value.trim().toLowerCase()
+    const billTitle = inputNewBIll.value.trim().toLowerCase()
     if(inputNewBIll.value && inputAdminAlias.value){
         const url = 'http://localhost:3000/create-new-bill'
         fetch(url,{
@@ -18,7 +19,7 @@ btnCreate.addEventListener('click',async ()=>{
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({"accessToken":token,"billTitle":inputNewBIll.value,"userAlias":inputAdminAlias.value}) 
+            body: JSON.stringify({"accessToken":token,"billTitle":billTitle,"userAlias":alias}) 
         })
         .then(()=>{
             location.href = './myBills.html'
