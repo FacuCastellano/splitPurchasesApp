@@ -4,10 +4,10 @@ function saludarPF(){
 
 
 //esta funcion me agrega un nombre en el header.
-function addNameToHeader(name,id){
+function addNameToHeader(alias,id){
     const div = document.createElement('div')
-    div.id = `headName-${id}`
-    div.innerText = name
+    div.id = `headAlias-${id}`
+    div.innerText = alias
     pAP.appendChild(div)
 }
 
@@ -80,7 +80,7 @@ function createPurchaseRow(purchaseStringId,concept,amount,payer,allBillParticip
     const divPayer = document.createElement('div')
     divPayer.id = `pPayer-${purchaseStringId}`
     divPayer.classList.add('purchase-payer')
-    divPayer.innerText = findUserName(payer,allBillParticipants)
+    divPayer.innerText = payer.charAt(0).toUpperCase() + payer.slice(1).toLowerCase()
     divContainer.appendChild(divPayer)
 
     const divTicksContainer = document.createElement('div')
@@ -89,10 +89,10 @@ function createPurchaseRow(purchaseStringId,concept,amount,payer,allBillParticip
     allBillParticipants.forEach(participant => {
         
         const divParticipantSquare = document.createElement('div')
-        divParticipantSquare.id = `tick-${participant[1]}`
+        divParticipantSquare.id = `tick-${participant[0]}`
         divParticipantSquare.innerHTML = '<i class="fa fa-check"></i>'
         divParticipantSquare.classList.add('square')
-        if(purchaseParticipants.includes(participant[1])){
+        if(purchaseParticipants.includes(participant[0])){
             divParticipantSquare.classList.add('activate')
         }
         
@@ -105,7 +105,7 @@ function createPurchaseRow(purchaseStringId,concept,amount,payer,allBillParticip
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({"accessToken":token,'billStringId':billStringId,"purchaseStringId":purchaseStringId,"participantStingId": `${participant[1]}`})
+            body: JSON.stringify({"accessToken":token,'billStringId':billStringId,"purchaseStringId":purchaseStringId,"participantStingId": `${participant[0]}`})
             })
             //cambio la visualizacion en la pagina (cuando inicie de nuevo deberia estar bien pq la primera vez levanta segun la )
             divParticipantSquare.classList.toggle('activate')

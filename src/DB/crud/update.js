@@ -20,7 +20,7 @@ async function addUserRegisteredToBill(billStringId,emailNewUser){
         const user = await getUserbyEmail(emailNewUser.toLowerCase())
         const userObjectId = user._id
         const userStringId = user.id
-        console.log(userStringId )
+
         if(user){
 
             const billObjectId = new ObjectId(billStringId)
@@ -39,14 +39,33 @@ async function addUserRegisteredToBill(billStringId,emailNewUser){
 }
 
 //funcion para agregar como participante a un usuario invitado  (que NO esta registrado en la APP) a un Gasto (Bill)
-async function addUserInvitedToBill(billStringId,nameUserInvited){
+async function addUserInvitedToBill(billStringId,AliasUserInvited){
 
     try{
-
+        const aliasInvited = AliasUserInvited.trim().toLowerCase()
         const billObjectId = new ObjectId(billStringId)
-        await Bill.updateOne({_id:billObjectId}, {$addToSet: {participants: nameUserInvited}}) //el $addToSet es similar al push..
-        await addParticipantToBalances(billObjectId,nameUserInvited)
-        return true // si devuelve true es pq lo registro o pq ya existia. 
+        const bill = await Bill.findOne({_id:billObjectId})
+        if(!Object.values(bill.alias).includes(aliasInvited)){
+            await Bill.bulkWrite([
+                {
+                    updateOne: {
+                        filter: {_id: billObjectId},
+                        update: {$addToSet: {participants: aliasInvited }}
+                    }
+                  },
+                  {
+                    updateOne: {
+                        filter: {_id: billObjectId},
+                        update: {$set: {[`alias.${aliasInvited}`]: aliasInvited}}
+                    }
+                  }
+            ]);
+            //deberia ver como reemplazar el addParticipantToBalance para incorporarlo al bulkWrite()
+            await addParticipantToBalances(billObjectId,aliasInvited)
+            return true //si devuelve true es pq lo creo.
+        }else{
+            return false //si devuelve false es pq ya algun usuario tenia ese alias.
+        }
     
 
     }catch(err){
@@ -71,7 +90,6 @@ async function addBillToUserRegiteredByStringId(billStringId,userStringId){
         } else {
             return false //si devuelve false es pq el mail del usuario no esta en la BD
         }
-        
 
     }catch(err){
         console.log("ha ocurrido el siguiente error en la funcion addBillToUser.")
@@ -276,22 +294,13 @@ async function makeBalance(strBillId){
 }
 
 
-
-
-
-async function showBalances(strBillId){
-    const billObjectId = new ObjectId(strBillId)
-    const bill = await Bill.findOne({"_id":billObjectId})
-    
-    console.log(bill.balances)
-}
-
 module.exports = { 
     addBillToUserRegisteredAndViceversa,
     addPurchaseToBill,
     addBillToUserRegiteredByStringId,
     toggleParticipantInPurchase,
     addParticipantToBalances,
-    makeBalance
+    makeBalance,
+    addUserInvitedToBill
 }
 

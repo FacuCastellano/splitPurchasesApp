@@ -1,7 +1,12 @@
 const partContainer = document.getElementById('partContainer')
-const inputPartUser = document.getElementById('inputPartUser')
-const inputPartInvited = document.getElementById('inputPartInvited')
-const btnAddPartUser = document.getElementById('btn-inputPartUser')
+//elementos para el usuario registrado
+const inputUserMail = document.getElementById('inputUserMail')
+const inputUserAlias = document.getElementById('inputUserAlias')
+const btnAddUserRegistered = document.getElementById('btn-addUserRegistered')
+//elementos para el participante invitado
+const inputInvitedAlias = document.getElementById('inputInvitedAlias')
+const btnAddInvitedPart = document.getElementById('btn-addInvetedPart')
+
 const backBtn = document.getElementById('back-button') 
 const participantsContainer = document.getElementById('participants-container')
 const billStringId = localStorage.getItem('billStringId')
@@ -40,11 +45,17 @@ function updateParticipantsView(){
             //console.log("el token es un objeto vacio {}")
             location.href = './index.html'
         } else {
-            const alias = data.billParticipantsAlias
             participantsContainer.innerHTML = ''  
+            const alias = data.billParticipantsAlias
+            
             data.billParticipantsAndMails.forEach(participant => {
+
+
                 const participantAlias = alias[participant[0]].charAt(0).toUpperCase() + alias[participant[0]].slice(1).toLowerCase()
-                const participantMail = participant[1]
+                const participantMail = participant[1] && participant[1].trim() !== '' ? participant[1] : 'Not user registered'
+                if(participantMail){
+
+                }
                 createDivParticipant(participantAlias,participantMail)
             });
         }
@@ -56,11 +67,10 @@ function updateParticipantsView(){
 //muestro los participantes que forman parte de la bill. 
 updateParticipantsView()
 
-btnAddPartUser.addEventListener('click',()=>{
-    const emailUserToAdd = inputPartUser.value.trim().toLowerCase()
-    const aliasUserToAdd = inputPartInvited.value.trim().toLowerCase()
-    
-    //const aliasUserToAdd = inputPartInvited.value.trim().charAt(0).toUpperCase()+ inputPartInvited.value.trim().slice(1).toLowerCase()
+// defino una funcion para crear participantes que estan registrados, si no se encuentra registrado, muestra un alert y aclara que el usuario no esta registrado. 
+btnAddUserRegistered.addEventListener('click',()=>{
+    const emailUserToAdd = inputUserMail.value.trim().toLowerCase()
+    const aliasUserToAdd = inputUserAlias.value.trim().toLowerCase()
     
     if(emailUserToAdd && aliasUserToAdd){
         const url = 'http://localhost:3000/add-user-registered-to-bill-participants'
@@ -90,15 +100,53 @@ btnAddPartUser.addEventListener('click',()=>{
             console.error('Error al recuperar el valor de CODE', error);
         })
         .finally(()=>{
-            inputPartUser.value = ''
+            inputUserMail.value = ''
         })
     }else{
         alert('Both fields must be filled to create a user')
     }
-    inputPartUser.value = ''
-    inputPartInvited.value = ''
+    inputUserMail.value = ''
+    inputUserAlias.value = ''
 
 })
+//borro por si toca f5
+inputUserMail.value = ''
+inputUserAlias.value = ''
 
 
-// defino una funcion para crear participantes que estan registrados, si no se encuentra registrado, muestra un alert y aclara que el usuario no esta registrado. 
+btnAddInvitedPart.addEventListener('click',()=>{
+    console.log('ejecuntando bien')
+    const aliasInvitedToAdd = inputInvitedAlias.value.trim().toLowerCase()
+    
+    if(aliasInvitedToAdd){
+        const url = 'http://localhost:3000/add-invited-to-bill-participants'
+        fetch(url,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"accessToken":token,'billStringId':billStringId,"aliasInvitedToAdd":aliasInvitedToAdd})
+        })
+        .then(res => {
+            //console.log("aca va la data\n",data)
+            //si el token expiro data = object{} (objeto vacio), por lo que la lista de keys sera de longitud 0, por ende uso esto para saber si el token expiro.
+            if(res.status === 401){
+                //aca en teoria entro si el usuario (el mail) ya esta registrado o si el alias ya esta registrado.
+                alert(`The alias:${aliasInvitedToAdd} has already registered in this bill`)
+            }
+           
+        })
+        .then(()=>{
+            updateParticipantsView()
+        })
+        .catch(error => {
+            console.error('Error al recuperar el valor de CODE', error);
+        })
+
+    }else{
+        alert('You must fill the alias in the input before to send')
+    }
+    inputInvitedAlias.value = ''
+})
+//borro por si actualiza la pagina.
+inputInvitedAlias.value = ''

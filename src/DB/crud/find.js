@@ -250,7 +250,7 @@ async function validationRegisterUser(strUser) {
         }
 
     }catch(err){
-        console.log("ha ocurrido el siguiente error en la funcion validationUserInBill.")
+        console.log("ha ocurrido el siguiente error en la funcion validationRegisterUser.")
         console.log(err)
     }
 }
@@ -298,7 +298,7 @@ async function getParticipantsOfPurchase(stringIdBill,stringIdPurchase) {
 //creo una funcion en la que intruciendo el stringid de una bill, y el stringid de un purchase, me devuelve un objeto con el concept, el amount y el payer de la purchase.
 async function getPurchaseInfo(stringIdBill,stringIdPurchase) {
     try{
-        //const participants =[]
+        
         const billObjectId = new ObjectId(stringIdBill)
         const data = {"concept": null, "amount":null,"payer":null}
         const bill = await Bill.findOne({_id:billObjectId})
@@ -306,12 +306,13 @@ async function getPurchaseInfo(stringIdBill,stringIdPurchase) {
             if (bill.purchases[purchase].id == stringIdPurchase) {
                 data.concept = bill.purchases[purchase].concept
                 data.amount = bill.purchases[purchase].amount
-                data.payer = bill.purchases[purchase].payer
-                
+                const payerId = bill.purchases[purchase].payer
+                data.payer = bill.alias[payerId]
+
                 return data
             }
         }
-        return participants
+        return []
 
     }catch(err){
         console.log("ha ocurrido el siguiente error en la funcion getParticipantsOfPurchase")
@@ -325,13 +326,14 @@ async function getBalancesByBillStringId(billStringId){
         const billObjectId = new ObjectId(billStringId)
         const bill = await Bill.findOne({_id:billObjectId})        
         const balances = bill.balances
+        const alias = bill.alias
         //agrego el nombre del participante para enviarlo con los balances.
         const participants = Object.keys(balances)
         for(index in participants){
-           const participantName = await getUserNameByStringId(participants[index])
-           balances[participants[index]].name = participantName
+            //const participantName = 'puky'//await getUserNameByStringId(participants[index])
+            balances[participants[index]].alias = bill.alias[participants[index]]
         }
-
+        console.log(balances)
         return balances
     }catch(err){
         //aca pueden pasar varior errores, lo importante es q devuelva (null) cuando se le pasa algo que no es un StingId valido o existente.

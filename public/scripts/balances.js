@@ -1,3 +1,4 @@
+console.log('si son balances.')
 const billStringId = localStorage.getItem('billStringId')
 const token = localStorage.getItem('accessToken')
 const backBtn = document.getElementById('back-button')
@@ -16,7 +17,7 @@ backBtn.addEventListener('click',()=>{
 
 
 function showParticipantBalance(participant){
-    const nameParticipant = participant.name.charAt(0).toUpperCase() + participant.name.slice(1).toLowerCase()
+    const nameParticipant = participant.alias.charAt(0).toUpperCase() + participant.alias.slice(1).toLowerCase()
     const mustPay = participant.mustPay/100
     const payed = participant.payed/100
     const balance = participant.balance/100
@@ -38,7 +39,6 @@ function showParticipantBalance(participant){
     }
     divParticipant.appendChild(divPB)
     balanceContainer.appendChild(divParticipant)
-
 
 }
 
@@ -77,8 +77,6 @@ function getBalances(){
             for(index in participantsIds){
                 showParticipantBalance(data[participantsIds[index]])
             }
-            
-            
         }
     })
     .catch(error => {

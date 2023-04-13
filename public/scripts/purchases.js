@@ -39,11 +39,14 @@ function updateParticipantsHeader(){
             location.href = './index.html'
         } else {
             pAP.innerHTML=''
-            data.billParticipants.forEach(participant => {
+            console.log(Object.keys(data.billParticipantsAlias))
+            Object.keys(data.billParticipantsAlias).forEach(stringId => {
                 //estas funciones las importo de modulePublics/purchasesFunction.js
-                addNameToHeader(participant[0],participant[1])
-                addSquareToHeader(participant[1])
-                addParticipantTopWP(participant[0],participant[1])
+                
+                const alias = data.billParticipantsAlias[stringId].charAt(0).toUpperCase() + data.billParticipantsAlias[stringId].slice(1).toLowerCase()
+                addNameToHeader(alias,stringId )
+                addSquareToHeader(stringId )
+                addParticipantTopWP(alias,stringId)
             })
         }
     })
@@ -135,6 +138,8 @@ async function showPurchase(purchaseStringId){
         body: JSON.stringify({"accessToken":token,'billStringId':billStringId,"purchaseStringId":purchaseStringId})
     })
     const {concept,amount,payer} = await res1.json() // no entiendo muy bien por que necesito poner el await aca, pq en teoria con el anterior deberia esperar, pero bueno. si no lo devuelvo me da "pending"
+    console.log(concept,amount,payer)
+    
     const res2 = await fetch('http://localhost:3000/get-bill-participants',{
         method: 'POST',
         headers: {
@@ -143,7 +148,10 @@ async function showPurchase(purchaseStringId){
         body: JSON.stringify({"accessToken":token,'billStringId':billStringId})
     })
     const dataRes2 = await res2.json()
-    const allBillParticipants = dataRes2.billParticipants //aca tengo todos los participantes de la bill con esto tengo que crear los cuadraditos.
+    const allBillParticipants = dataRes2.billParticipantsAndMails
+    
+    
+    //const allBillParticipants = dataRes2.billParticipants //aca tengo todos los participantes de la bill con esto tengo que crear los cuadraditos.
     
     const res3 = await fetch('http://localhost:3000/get-participants-on-particular-purchase',{
         method: 'POST',
@@ -154,7 +162,7 @@ async function showPurchase(purchaseStringId){
     })
     const dataRes3 = await res3.json()
     const purchaseParticipants = dataRes3.purchaseParticipants
-    // console.log(concept,amount,payer)
+    //console.log(concept,amount,payer)
     // console.log(allBillParticipants)
     // console.log(purchaseParticipants)
     createPurchaseRow(purchaseStringId,concept,parseFloat(amount/100),payer,allBillParticipants,purchaseParticipants)

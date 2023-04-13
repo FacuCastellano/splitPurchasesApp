@@ -3,7 +3,7 @@ const {tokenValidator} = require('../functions/tokenFunctions.js')
 const {calculateTransfers} = require('../functions/severancePayFunctions.js')
 
 const {validationUserInBill,getBillByStringId,validationRegisterUser,getPurchasesStrIdInBill,getParticipantsOfPurchase,getPurchaseInfo,getBalancesByBillStringId,checkAliasAndUserAreNotInBill} = require('../DB/crud/find')
-const {addBillToUserRegisteredAndViceversa,addPurchaseToBill,toggleParticipantInPurchase,makeBalance} = require('../DB/crud/update')
+const {addBillToUserRegisteredAndViceversa,addPurchaseToBill,toggleParticipantInPurchase,makeBalance,addUserInvitedToBill} = require('../DB/crud/update')
 const {deleteBill,deleteParticipantFromBill} = require('../DB/crud/delete')
 const User = require('../DB/models/User.js')
 const router = Router()
@@ -57,6 +57,7 @@ router.post("/get-bill-participants", async (req,res)=>{
                     "billParticipantsAndMails":participantsAndMails,
                     "billParticipantsAlias":bill.alias
                 }
+                console.log(data)
                 res.send(JSON.stringify(data))
             } else {
                 res.send("the user is not in the bill")
@@ -107,6 +108,45 @@ router.post("/add-user-registered-to-bill-participants", async (req,res)=>{
                         res.status(401) //primero tengo q setear el status antes que el send. pq sino lo envio con el estatus por defecto q es 200.
                         res.send(JSON.stringify({"UserAndAliasAvaible":false}))
                     }
+                } else {
+                    res.send("the user is not in the bill")
+                }
+            }else{
+                res.send("User not found")
+            }
+
+        }else {
+            res.status(400)
+        }
+        res.end()
+    
+    } catch {
+        res.send(null)
+        res.end()
+    } 
+})
+
+
+// agrego nuevos participantes como invitados (Es decir no registrados) a la bill.
+router.post("/add-invited-to-bill-participants", async (req,res)=>{
+    try{
+        const {accessToken,billStringId,aliasInvitedToAdd} = await req.body
+        
+        
+        if(accessToken && billStringId && aliasInvitedToAdd){
+            const validationResult = await tokenValidator(accessToken)
+            if(validationResult){
+                const userId = validationResult.SubId
+                const checkValidation = await validationUserInBill(userId,billStringId)
+                if(checkValidation){
+
+                    if(await addUserInvitedToBill(billStringId,aliasInvitedToAdd)){
+                        //si la funcion adduserInvitedToBill(), devuelve true es pq lo creo, si devuelve false es pq ya esta ocupado ese alias.
+                        res.status(200)
+                    }else{
+                        res.status(401)
+                    }
+
                 } else {
                     res.send("the user is not in the bill")
                 }
