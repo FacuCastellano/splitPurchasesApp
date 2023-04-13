@@ -44,39 +44,39 @@ const balancesPrueba = {
 	  mustPay: 154881.6666666667,
 	  payed: 132500,
 	  balance: -22381.666666666686,
-	  name: 'facu'
+	  alias: 'facu'
 	},
 	'642db8e15aae3915ba3702ef': {
 	  mustPay: 207056.6666666667,
 	  payed: 231200,
 	  balance: 24143.333333333314,
-	  name: 'male'
+	  alias: 'male'
 	},
 	'642db8aa5aae3915ba3702e9': {
 	  mustPay: 460786.6666666667,
 	  payed: 453100,
 	  balance: -7686.666666666686,
-	  name: 'martin'
+	  alias: 'martin'
 	},
 	'642db8c15aae3915ba3702ec': {
 	  mustPay: 240181.6666666667,
 	  payed: 341200,
 	  balance: 101018.33333333331,
-	  name: 'euge'
+	  alias: 'euge'
 	},
 	'642ee97e04fa72677d6a9e30': {
 	  mustPay: 240181.6666666667,
 	  payed: 266845,
 	  balance: 26663.333333333314,
-	  name: 'ruben'
+	  alias: 'ruben'
 	},
 	'64317de441891b318bcffac2': {
 	  mustPay: 75516.66666666667,
 	  payed: 0,
 	  balance: -75516.66666666667,
-	  name: 'magda'
+	  alias: 'magda'
 	},
-	'64317dfa41891b318bcffac5': { mustPay: 46240, payed: 0, balance: -46240, name: 'tose' }
+	'64317dfa41891b318bcffac5': { mustPay: 46240, payed: 0, balance: -46240, alias: 'tose' }
   }
 
 function calculateTransfers(balances){
@@ -88,7 +88,7 @@ function calculateTransfers(balances){
 
 	for(let i in participants){
 		const userStringId = participants[i]
-		const userAlias = balances[userStringId].name
+		const userAlias = balances[userStringId].alias
 		const userBalance = balances[userStringId].balance
 		if(userBalance > 0){
 			creditors.push([userStringId,userAlias,userBalance])

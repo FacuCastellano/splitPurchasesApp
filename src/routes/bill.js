@@ -348,6 +348,9 @@ router.post("/get-bill-transfers", async (req,res)=>{
             const checkValidation = await validationUserInBill(userId,billStringId)
             if(checkValidation){
                 const balances = await getBalancesByBillStringId(billStringId)
+                console.log('----2-----')
+                console.log(balances)
+                console.log('----2-----')
                 const transfers = calculateTransfers(balances)
                 res.status(200)
                 res.send(JSON.stringify(transfers))
