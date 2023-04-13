@@ -46,15 +46,16 @@ router.post("/get-bill-participants", async (req,res)=>{
             const checkValidation = await validationUserInBill(userId,billStringId)
             if(checkValidation){
                 const bill = await getBillByStringId(billStringId)
-                const participants = []
+                const participantsAndMails = []
                 
                 //uso for.. of y NO array.forEach() por que el .forEach() NO espera que se resuelva la promesa y me devuelve  Bills=[]
                 for (const userObjectId of bill.participants){
                     const participant = await validationRegisterUser(userObjectId)
-                    participants.push(participant)
+                    participantsAndMails.push(participant)
                 }
                 const data = {
-                    "billParticipants":participants
+                    "billParticipantsAndMails":participantsAndMails,
+                    "billParticipantsAlias":bill.alias
                 }
                 res.send(JSON.stringify(data))
             } else {
@@ -75,32 +76,38 @@ router.post("/get-bill-participants", async (req,res)=>{
 
 
 // agrego nuevos participantes a la bill y agrego la bill en cada participante.
-router.post("/add-user-regitered-to-bill-participants", async (req,res)=>{
+router.post("/add-user-registered-to-bill-participants", async (req,res)=>{
     try{
-        const {accessToken,billStringId,emailUserToAdd} = await req.body
-        const validationResult = await tokenValidator(accessToken)
-        if(validationResult){
-            const userId = validationResult.SubId
-            const checkValidation = await validationUserInBill(userId,billStringId)
-            if(checkValidation){
-                const add = await addBillToUserRegisteredAndViceversa(billStringId,emailUserToAdd)
-                if(add){
-                    console.log("The user with the email: ",emailUserToAdd," was added to this bill.")
-                    res.status(200)
+        const {accessToken,billStringId,emailUserToAdd,aliasUserToAdd} = await req.body
+        if(accessToken && billStringId && emailUserToAdd && aliasUserToAdd){
+            const validationResult = await tokenValidator(accessToken)
+            if(validationResult){
+                const userId = validationResult.SubId
+                const checkValidation = await validationUserInBill(userId,billStringId)
+                if(checkValidation){
+                    const add = await addBillToUserRegisteredAndViceversa(billStringId,emailUserToAdd,aliasUserToAdd)
+                    if(add){
+                        console.log("The user with the email: ",emailUserToAdd," was added to this bill.")
+                        res.status(200)
 
+                    } else {
+                        console.log("Error!\nThe user with the email: ",emailUserToAdd," was not added to this bill.")
+                        res.status(500)
+                    }
+                    
                 } else {
-                    console.log("Error!\nThe user with the email: ",emailUserToAdd," was not added to this bill.")
-                    res.status(500)
+                    res.send("the user is not in the bill")
                 }
-                
-            } else {
-                res.send("the user is not in the bill")
-            }
 
-        }else{
-            res.send("User not found")
+            }else{
+                res.send("User not found")
+            }
+        }else {
+            res.status(400)
         }
         res.end()
+        
+        
     
     } catch {
         res.send(null)

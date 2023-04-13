@@ -32,6 +32,9 @@ hr{
     width: 100%;
     margin: 10px 0;
 }
+hr.light-line{
+    border: 1px solid white;
+}
 .container{
     
     background-color: rgba(0, 0, 0, 0.4);
@@ -58,47 +61,71 @@ hr{
 .input-container{
     margin: 5px 0px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     
 }
-.input-container label{
-    margin-right: 3px;   
+
+.title-h4{
+    width:100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    
+}
+.title-h4 div {
+    width:fit-content;
+
 }
 
 .input-participant{
     font-size: 17px;
-    display: flex;
-    flex-wrap: nowrap;
     margin: 5px 0px;
-    justify-content: flex-start;
-    align-items: center;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 3fr;
+
 }
-.input-participant i{
+.input-participant label{
+    grid-row: 1/1;
+    grid-column: 1/2;
+    text-align: center;
+}
+.input-participant input{
+    grid-row: 1/1;
+    grid-column: 2/2
+}
+
+
+/* .input-participant i{
     justify-self: flex-end;
     align-self: flex end;
-}
+} */
 
 #inputPart{
     width: 90px;
     margin: 0px 10px;
 } 
 
- .btn-add{
+.btn-add{
+    align-self: center;
+    width: 100px;
     color:white;
     border-radius: 3px;
     padding: 5px 10px;
-    margin: 3px;
+    margin: 10px 0px;
     cursor: pointer;
     background-color:rgb(38, 97, 146) ; 
     border: 1px solid rgb(167, 165, 165);
 }
 
+
 #partContainer{
     position:relative;
 }
 
-h4{
-    align-self: flex-start;
-}
+
 
 #participants-container{
     width: 100%;
@@ -107,7 +134,8 @@ h4{
     flex-direction: column;
 }
 .participant{
-    width:90%;
+    padding: 0px 5px;
+    width:auto;
     margin:7px;
     background-color: rgb(211, 234, 241); 
     border-radius: 3px;
@@ -127,6 +155,10 @@ h4{
     cursor: pointer;
     background-color:rgb(38, 97, 146);
     border: 2px solid black;
+}
+
+span.mail-addres{
+    font-size: small;
 }
 
 /*boton back */

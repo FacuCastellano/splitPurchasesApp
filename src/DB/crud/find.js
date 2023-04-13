@@ -33,6 +33,17 @@ async function getUserObjectIdbyEmail(email){
         return null // si no lo encuentra tirar devuelve null.. no error.
     }
 }
+//esta funcion recibe el email(string) de un usuario y devuelve el StringId del usuario.
+async function getUserStringIdbyEmail(email){
+    try{
+        const user = await User.findOne({email:email})
+        return user.id 
+    }catch(err){
+        return null // si no lo encuentra tirar devuelve null.. no error.
+    }
+}
+
+
 //esta funcion devuelve a todo el User, por su ID 
 async function getUserByObjectId(ObjectId){
     try{
@@ -199,9 +210,9 @@ async function validationRegisterUser(strUser) {
         const user = await getUserByStringId(strUser)
         
         if(user){
-            return [user.name,user.id]
+            return [user.id,user.email]
         } else {
-            return strUser+" (Inv)"
+            return [strUser,null]
         }
 
     }catch(err){
@@ -320,7 +331,8 @@ module.exports = {
     getPurchaseInfo,
     getParticipantsOfPurchase,
     getUserNameByStringId,
-    getBalancesByBillStringId
+    getBalancesByBillStringId,
+    getUserStringIdbyEmail
 }
 
 

@@ -21,26 +21,47 @@
         <hr>
 
         <div class="input-container">
-            <h4>Add Regiter User</h4>
-            <div class="input-participant">
-            <label>User: </label><br>
-            <input type="text" id="inputPartUser" placeholder="Add the user email"><br>
-            <button class="btn btn-add" id="btn-inputPartUser">Add <i class="fa fa-users"></i>+</button>
+            <div class="title-h4">
+                <h4>Add Register User</h4>
             </div>
+            
+            <div class="input-participant">
+                <label>Mail </label><br>
+                <input type="text" id="inputPartUser" placeholder="Add the user email"><br>            
+            </div>
+
+            <div class="input-participant">
+                <label>Alias </label><br>
+                <input type="text" id="inputPartInvited" placeholder="Add an alias for the user"><br>
+            </div>
+
+            <button class="btn btn-add" id="btn-inputPartUser">Add <i class="fa fa-users"></i>+</button>
+        
         </div>
+    
+        <hr class="light-line">
 
         <div class="input-container">
-            <h4>Add Not Regiter User</h4>
-            <div class="input-participant">
-            <label>Invited:</label><br>
-            <input type="text" id="inputPartInvited" placeholder="Add invited name"><br>
-            <button class="btn btn-add" id="btn-inputPartInvited">Add <i class="fa fa-users"></i>+</button>
+            
+            <div class="title-h4">
+                <h4>Add Not Regiter User</h4>
             </div>
-        </div>
-        <div id="participants-container">
-            <!-- <div class="participant"><i class="fas fa-times delete-icon"></i><span>facuntano</span></div> -->
+            
+            <div class="input-participant">
+                <label>Invited </label><br>
+                <input type="text" id="inputPartUser" placeholder="Add an alias for the user"><br>
+            </div>
+            
+            <button class="btn btn-add" id="btn-inputPartUser">Add <i class="fa fa-users"></i>+</button>
         </div>
         <hr>
+        <div id="participants-container">
+            <!-- <div class="participant">
+                <i class="fas fa-times delete-icon"></i>&nbsp;<span>Facundo</span>&nbsp;-&nbsp;<span class="mail-addres">castellanofacundo@gmail.com</span>
+            </div>  -->
+            
+        </div>
+        
 
 
         <!-- esto se llena desde JS segun los nombres ingresados-->

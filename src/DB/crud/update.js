@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 //const Schema = mongoose.Schema
 const ObjectId = mongoose.Types.ObjectId
 //const { Schema, Types: { ObjectId } } = require('mongoose');
-const {getUserObjectIdbyEmail,getUserbyEmail} = require('./find.js')
+const {getUserObjectIdbyEmail,getUserbyEmail,getUserStringIdbyEmail} = require('./find.js')
 
 
 
@@ -104,10 +104,14 @@ async function addBillToUserRegitered(billStringId,emailNewUser){
 }
 
 
-async function addBillToUserRegisteredAndViceversa(billStringId,emailNewUser){
-
+async function addBillToUserRegisteredAndViceversa(billStringId,emailNewUser,aliasUserToAdd){
+   
     try{
-
+        const userStringId = await getUserStringIdbyEmail(emailNewUser)
+        const billObjectId = new ObjectId(billStringId)
+        
+        await Bill.updateOne({_id:billObjectId}, {$set: {[`alias.${userStringId}`]: aliasUserToAdd}})
+        
         const email = emailNewUser.toLowerCase()
         const a = await addUserRegisteredToBill(billStringId,email)
         const b = await addBillToUserRegitered(billStringId,email)
@@ -122,19 +126,7 @@ async function addBillToUserRegisteredAndViceversa(billStringId,emailNewUser){
         console.log(err)
     }
 }
-//addBillToUserAndViceversa
-//addBillToUserAndViceversa(new ObjectId('6408f146af1cd25b725535d6'),'ruben@gmail.com')
 
-//esta funcion sirve para argregar un purchase a un bill,
-
-// purchase12 = {
-//         "concept":"asado",
-//         "amount":175263,
-//         "payer":"6410d3579f927194a5335203",
-//         "participants":["6410d3579f927194a5335203","6410d3579f927194a5335205","tose","gon"]
-// }
-
-//console.log(JSON.stringify(purchase12))
 
 async function addPurchaseToBill(strBillId,purchaseToAdd){
     try{

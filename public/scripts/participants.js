@@ -1,5 +1,6 @@
 const partContainer = document.getElementById('partContainer')
 const inputPartUser = document.getElementById('inputPartUser')
+const inputPartInvited = document.getElementById('inputPartInvited')
 const btnAddPartUser = document.getElementById('btn-inputPartUser')
 const backBtn = document.getElementById('back-button') 
 const participantsContainer = document.getElementById('participants-container')
@@ -12,10 +13,11 @@ backBtn.addEventListener('click',()=>{
 
 
 //genero una funcion para que me cree los elementos participants para mostrar.
-function createDivParticipant(participantName){
+function createDivParticipant(participantAlias,participantMail='Not user Registered'){
+
     const div = document.createElement('div')
     div.classList.add("participant")
-    div.innerHTML = `<i class="fas fa-times delete-icon"></i><span>${participantName}</span>`
+    div.innerHTML = `<i class="fas fa-times delete-icon"></i>&nbsp;<span>${participantAlias}</span>&nbsp;-&nbsp;<span class="mail-addres">${participantMail}</span>`
     participantsContainer.appendChild(div)
 }
 
@@ -37,10 +39,13 @@ function updateParticipantsView(){
         if(Object.keys(data).length === 0){
             //console.log("el token es un objeto vacio {}")
             location.href = './index.html'
-        } else {    
+        } else {
+            const alias = data.billParticipantsAlias
             participantsContainer.innerHTML = ''  
-            data.billParticipants.forEach(participant => {
-                createDivParticipant(participant[0])
+            data.billParticipantsAndMails.forEach(participant => {
+                const participantAlias = alias[participant[0]]
+                const participantMail = participant[1]
+                createDivParticipant(participantAlias,participantMail)
             });
         }
     })
@@ -53,33 +58,40 @@ updateParticipantsView()
 
 btnAddPartUser.addEventListener('click',()=>{
     const emailUserToAdd = inputPartUser.value
-    
-    const url = 'http://localhost:3000/add-user-regitered-to-bill-participants'
+    const aliasUserToAdd = inputPartInvited.value
 
-    fetch(url,{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({"accessToken":token,'billStringId':billStringId,"emailUserToAdd":emailUserToAdd})
-    })
-    .then(res => {
-        //console.log("aca va la data\n",data)
-        //si el token expiro data = object{} (objeto vacio), por lo que la lista de keys sera de longitud 0, por ende uso esto para saber si el token expiro.
-        if(res.status === 500){
-            //console.log("el token es un objeto vacio {}")
-            alert(`Error!\nThe user with the email: ${emailUserToAdd}, was not added to the bill.\n It's probably that this mail is not registered in the app.`)
-        }
-    })
-    .then(()=>{
-        updateParticipantsView()
-    })
-    .catch(error => {
-        console.error('Error al recuperar el valor de CODE', error);
-    })
-    .finally(()=>{
-        inputPartUser.value = ''
-    })
+    if(emailUserToAdd && aliasUserToAdd){
+        const url = 'http://localhost:3000/add-user-registered-to-bill-participants'
+        fetch(url,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"accessToken":token,'billStringId':billStringId,"emailUserToAdd":emailUserToAdd,"aliasUserToAdd":aliasUserToAdd})
+        })
+        .then(res => {
+            //console.log("aca va la data\n",data)
+            //si el token expiro data = object{} (objeto vacio), por lo que la lista de keys sera de longitud 0, por ende uso esto para saber si el token expiro.
+            if(res.status === 500){
+                //console.log("el token es un objeto vacio {}")
+                alert(`Error!\nThe user with the email: ${emailUserToAdd}, was not added to the bill.\n It's probably that this mail is not registered in the app.`)
+            }
+        })
+        .then(()=>{
+            updateParticipantsView()
+        })
+        .catch(error => {
+            console.error('Error al recuperar el valor de CODE', error);
+        })
+        .finally(()=>{
+            inputPartUser.value = ''
+        })
+    }else{
+        alert('Both fields must be filled to create a user')
+    }
+    inputPartUser.value = ''
+    inputPartInvited.value = ''
+
 })
 
 

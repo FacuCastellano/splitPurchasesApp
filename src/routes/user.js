@@ -64,11 +64,11 @@ router.post("/get-user-bills", async (req,res)=>{
 
 //creo la ruta para crear bills.
 router.post("/create-new-bill", async (req,res)=>{
-    const {accessToken,billTitle} = await req.body
+    const {accessToken,billTitle,userAlias} = await req.body
     const validationResult = await tokenValidator(accessToken)
     if(validationResult){
         const userStringId = validationResult.SubId
-        const newBill = await createBill(billTitle,userStringId)
+        const newBill = await createBill(billTitle,userStringId,userAlias)
         if(newBill){
             res.status(200)
             res.send('Ok')

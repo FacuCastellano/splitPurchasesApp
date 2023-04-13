@@ -19,6 +19,10 @@ const billSchema = new Schema ({
     participants: [
       { type: Schema.Types.Mixed}
     ],
+    alias:{
+      type: Schema.Types.Mixed, // con esto inicializo un objeto vacio que despues lo voy a ir llenando.
+      default: {}
+    },
     purchases: [
       {
         concept: { type: String },

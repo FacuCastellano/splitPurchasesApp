@@ -31,7 +31,7 @@ async function createUser(name,email,pass){
 }
 
 //funcion para crear un "bill" nuevo.  createBill(billTitle,userStringId)
-async function createBill(billTitle,userStringId){
+async function createBill(billTitle,userStringId,userAlias){
     try{
         const creatorId = new ObjectId(userStringId)
         
@@ -40,7 +40,7 @@ async function createBill(billTitle,userStringId){
             admins: [creatorId],
             participants: [creatorId]
         })
-
+        bill.alias[userStringId] = userAlias
         await addBillToUserRegiteredByStringId(bill.id,userStringId) 
         await bill.save()
         //primero tengo que ejecutar bill.save(), por que sino addParticipantToBalances, no lo va a encontrar en la BD.
