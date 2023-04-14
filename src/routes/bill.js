@@ -2,7 +2,7 @@ const {Router} = require('express')
 const {tokenValidator} = require('../functions/tokenFunctions.js')
 const {calculateTransfers} = require('../functions/severancePayFunctions.js')
 
-const {validationUserInBill,getBillByStringId,validationRegisterUser,getPurchasesStrIdInBill,getParticipantsOfPurchase,getPurchaseInfo,getBalancesByBillStringId,checkAliasAndUserAreNotInBill} = require('../DB/crud/find')
+const {validationUserInBill,getBillByStringId,validationRegisterUser,getPurchasesStrIdInBill,getParticipantsOfPurchase,getPurchaseInfo,getBalancesByBillStringId,checkAliasAndUserAreNotInBill,checkUserExistenceByEmail} = require('../DB/crud/find')
 const {addBillToUserRegisteredAndViceversa,addPurchaseToBill,toggleParticipantInPurchase,makeBalance,addUserInvitedToBill} = require('../DB/crud/update')
 const {deleteBill,deleteParticipantFromBill} = require('../DB/crud/delete')
 const User = require('../DB/models/User.js')
@@ -88,10 +88,13 @@ router.post("/add-user-registered-to-bill-participants", async (req,res)=>{
                 const userId = validationResult.SubId
                 const checkValidation = await validationUserInBill(userId,billStringId)
                 if(checkValidation){
-                    console.log('aca vamos')
-                    console.log(await checkAliasAndUserAreNotInBill(billStringId,emailUserToAdd,aliasUserToAdd))
-                    if(await checkAliasAndUserAreNotInBill(billStringId,emailUserToAdd,aliasUserToAdd)){
+                    console.log('aca vamos facundin')
+                    //en las condiciones checkuserExistenceByEmail() tiene q ir a la izq para que si es falsa, la otra condicion no se evalue, si no esta registrado el usuario la condicopn checkAliasAndUserAreNoInBill() tiraria error.
+                    console.log(await checkUserExistenceByEmail(emailUserToAdd))
 
+                    console.log("aca estamos en 2")
+                    if(await checkUserExistenceByEmail(emailUserToAdd)  && await checkAliasAndUserAreNotInBill(billStringId,emailUserToAdd,aliasUserToAdd)  ){
+                        console.log("entre")
                         const add = await addBillToUserRegisteredAndViceversa(billStringId,emailUserToAdd,aliasUserToAdd)
                         if(add){
                         console.log("The user with the email: ",emailUserToAdd," was added to this bill.")
@@ -103,10 +106,18 @@ router.post("/add-user-registered-to-bill-participants", async (req,res)=>{
                         }
 
                     }else{
-                        //si entro aca es pq el alias o el mail ya estan en la bill.
-                        console.log('entre a este. no deberia pasar nada.')
-                        res.status(401) //primero tengo q setear el status antes que el send. pq sino lo envio con el estatus por defecto q es 200.
-                        res.send(JSON.stringify({"UserAndAliasAvaible":false}))
+                        console.log("al else directo")
+                        if(! await checkUserExistenceByEmail(emailUserToAdd)){
+                            // el usuario no esta registrado
+                            res.status(401) //primero tengo q setear el status antes que el send. pq sino lo envio con el estatus por defecto q es 200.
+                            res.send(JSON.stringify({"userProblem":1})) // el 1 significa que no esta registrado
+                        } else {
+                            //si entro aca es pq el alias o el mail ya estan en la bill.
+                            console.log('registrado pero el alias o el usuario ya estan agregados')
+                            res.status(401) //primero tengo q setear el status antes que el send. pq sino lo envio con el estatus por defecto q es 200.
+                            res.send(JSON.stringify({"userProblem":2})) // el 2 significa que el alias o el usuario estan ocupados
+                        }
+                        
                     }
                 } else {
                     res.send("the user is not in the bill")

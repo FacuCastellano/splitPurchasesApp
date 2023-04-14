@@ -81,16 +81,15 @@ btnAddUserRegistered.addEventListener('click',()=>{
             },
             body: JSON.stringify({"accessToken":token,'billStringId':billStringId,"emailUserToAdd":emailUserToAdd,"aliasUserToAdd":aliasUserToAdd})
         })
-        .then(res => {
-            //console.log("aca va la data\n",data)
-            //si el token expiro data = object{} (objeto vacio), por lo que la lista de keys sera de longitud 0, por ende uso esto para saber si el token expiro.
-            if(res.status === 401){
-                //aca en teoria entro si el usuario (el mail) ya esta registrado o si el alias ya esta registrado.
-                alert(`The email or alias, has already registered in this bill`)
-            }
-            if(res.status === 500){
-                //console.log("el token es un objeto vacio {}")
-                alert(`Error!\nThe user with the email: ${emailUserToAdd}, was not added to the bill.\n It's probably that this mail is not registered in the app.`)
+        .then(res => res.json())
+        .then(data =>{
+            const err = data.userProblem
+            if(err){
+                if(err === 1){
+                    alert(`The email: "${emailUserToAdd}" is not registered in this app.\nYou should verify the mail or add "${aliasUserToAdd}" directly as a not user registered.`)
+                } else if (err == 2){
+                    alert(`The email or alias, has already registered in this bill.`)
+                }
             }
         })
         .then(()=>{
