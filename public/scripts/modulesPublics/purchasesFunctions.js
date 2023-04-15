@@ -76,8 +76,27 @@ function inputsValidation(){
     }
 }
 
+async function deletePurchase(billStringId,purchaseStringId){
+    try{
+        const url = 'http://localhost:3000/delete-purchase-from-bill'
+        await fetch(url,{
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"accessToken":token,'billStringId':billStringId,'purchaseStringId':purchaseStringId})
+        })
 
-
+    }catch(err){
+        console.log("error en la funcion deletePurchase()")
+        console.log(err)
+    }
+    console.log(`estas bien.. eliminando ${purchaseStringId}`)
+}
+function editPurchase(billStringId,purchaseStringId){
+    alert(`Sorry!\nThis funcionality is not avaible yet.\nBut you are trying to edit the purchase with id=${purchaseStringId}, in the bill with id=${billStringId}`)
+    
+}
 
 //esta funcion busca en el array usersArray el string y devuelve el name correspondiente
 
@@ -118,17 +137,33 @@ function createPurchaseRow(purchaseStringId,concept,amount,payer,allBillParticip
     const divTicksContainer = document.createElement('div')
     divTicksContainer.classList.add('purchase-afect-color')
 
+    //creo los iconos de editar y eliminar con sus atributos y funciones.
+    //contenedor de los iconos
     const divIcons = document.createElement('div')
     divIcons.classList.add('icons-container')
-    divIcons.innerHTML = `
-    <div class="edit-icon">
-        <i class="fa-solid fa-pencil"></i>
-    </div>
-    <div class="trash-icon">
-        <i class="fa-solid fa-trash"></i>
-    </div>
-    `
+    //icono edit(pencil)
+    const divEdit= document.createElement('div')
+    divEdit.innerHTML = `<i class="fa-solid fa-pencil"></i>`
+    divEdit.classList.add('edit-icon')
+    divEdit.id = `edit-${purchaseStringId}`   
+    divEdit.addEventListener('click',()=>{
+        editPurchase(billStringId,purchaseStringId)
+    })
+    //icono trash
+    const divTrash = document.createElement('div')
+    divTrash.innerHTML = `<i class="fa-solid fa-trash"></i>`
+    divTrash.classList.add('trash-icon')
+    divTrash.id = `trash-${purchaseStringId}`
+    divTrash.addEventListener('click',async ()=>{
+       await deletePurchase(billStringId,purchaseStringId)
+       await showAllPurchases()
+    })
+    
+    //agrego cada div donde corresponde.
+    divIcons.appendChild(divEdit)
+    divIcons.appendChild(divTrash)
     divContainer.appendChild(divIcons)
+
 
     allBillParticipants.forEach(participant => {
         

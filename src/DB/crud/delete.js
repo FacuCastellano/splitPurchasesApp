@@ -77,10 +77,26 @@ async function deleteParticipantFromBill(billStringID,participantStringId){
   
 }
 
+async function deletePurchaseFromBill(billStringID,purchaseStringId){
+  const billObjectId = new ObjectId(billStringID)
+  const purchaseObjectId = new ObjectId(purchaseStringId)
+ 
+  await Bill.findOneAndUpdate(
+    { _id: billObjectId },
+    { $pull: { purchases: { _id: purchaseObjectId } } },
+    { new: true }
+  );
+  //Rehago el balance.
+  await makeBalance(billStringID)
+}
+//deletePurchaseFromBill('64397c89ac0a79ac1baa03e2','643a9c58fad3db71b5cfec83')
+
+
 
 //deleteParticipantFromBill("6436a06e2db10265cc469dab","64317dfa41891b318bcffac5")
 
 module.exports ={
   deleteBill,
-  deleteParticipantFromBill
+  deleteParticipantFromBill,
+  deletePurchaseFromBill
 }

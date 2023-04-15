@@ -4,7 +4,7 @@ const {calculateTransfers} = require('../functions/severancePayFunctions.js')
 
 const {validationUserInBill,getBillByStringId,validationRegisterUser,getPurchasesStrIdInBill,getParticipantsOfPurchase,getPurchaseInfo,getBalancesByBillStringId,checkAliasAndUserAreNotInBill,checkUserExistenceByEmail} = require('../DB/crud/find')
 const {addBillToUserRegisteredAndViceversa,addPurchaseToBill,toggleParticipantInPurchase,makeBalance,addUserInvitedToBill} = require('../DB/crud/update')
-const {deleteBill,deleteParticipantFromBill} = require('../DB/crud/delete')
+const {deleteBill,deleteParticipantFromBill,deletePurchaseFromBill} = require('../DB/crud/delete')
 const User = require('../DB/models/User.js')
 const router = Router()
 const mongoose = require('mongoose')
@@ -408,13 +408,13 @@ router.delete("/delete-bill", async (req,res)=>{
 
 router.delete("/delete-participant-from-bill", async (req,res)=>{
     try{
-        const {accessToken,billStringId,participantStringId} = await req.body
+        const {accessToken,billStringId,purchaseStringId} = await req.body
         const validationResult = await tokenValidator(accessToken)
         if(validationResult){
             const userId = validationResult.SubId
             const checkValidation = await validationUserInBill(userId,billStringId)
             if(checkValidation){
-                await deleteParticipantFromBill(billStringId,participantStringId)
+                await deleteParticipantFromBill(billStringId,purchaseStringId)
                 res.status(200)
             } else {
                 res.send("the user is not in the bill")
@@ -430,6 +430,33 @@ router.delete("/delete-participant-from-bill", async (req,res)=>{
         res.end()
     } 
 })
+
+
+router.delete("/delete-purchase-from-bill", async (req,res)=>{
+    try{
+        const {accessToken,billStringId,purchaseStringId} = await req.body
+        const validationResult = await tokenValidator(accessToken)
+        if(validationResult){
+            const userId = validationResult.SubId
+            const checkValidation = await validationUserInBill(userId,billStringId)
+            if(checkValidation){
+                await deletePurchaseFromBill(billStringId,purchaseStringId)
+                res.status(200)
+            } else {
+                res.send("the user is not in the bill")
+            }
+            
+        }else{
+            res.send("User not found")
+        }
+        res.end()
+    
+    } catch {
+        res.send(null)
+        res.end()
+    } 
+})
+
 
 //{"concept": null, "amount":null,"payer":null}
 //getPurchasesStrIdInBill()
