@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Split Purchases | Purchases</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
-    
+    <script src="https://kit.fontawesome.com/ef08a0a447.js" crossorigin="anonymous"></script>
     <link rel='stylesheet' type="text/css" href='../stylesheets/purchases.css'/>
     <script src="../scripts/modulesPublics/purchasesFunctions.js"></script>
     <script src="../scripts/modulesPublics/inputsValidator.js"></script>
@@ -15,11 +15,11 @@
 </head>
 <body>
     <div class="container" id="purchase-container">
-        <div class="head">
+        <div class="main-title">
             <h2> Purchases </h2>
             <!-- <button class="btn" id="btn-add-purchase">Add <i class="fa fa-coins"></i>+</button> -->
         </div>
-        <div class="purchase-title">
+        <div class="secondary-titles-container">
 
             <div class="concept" id="concept-title">
                 <h2>Concept</h2>
@@ -37,14 +37,20 @@
                 
 
             </div>
+            <div class="invisible-block"></div>
         </div>
         
-        <!--Ahora se crea el gasto para agregar los input  -->
+        <!--Ahora se crea los input para agregar los input  -->
 
-        <div class="purchase purchase-main">
-            <div class="purchase-concept"><input type="text" id="inpPurc-concept"></div>
-            <div class="purchase-amount"><input type="number" id="inpPurc-amount"></div>
-            <div class="purchase-pWP">
+        <div class="purchase">
+            
+            <div class="purchase-concept">
+                <input type="text" id="inpPurc-concept">
+            </div>
+            <div class="purchase-amount">
+                <input type="number" id="inpPurc-amount">
+            </div>
+            <div class="purchase-payer">
                 <select id="pWPoptions">
                     <option value="">Options</option>
                     <!-- Estas opciones se crean con la funcion addParticipant desde JS -->
@@ -56,9 +62,18 @@
             <div class="purchase-afect-color" id="gTC">
                 <!-- Aca se crean los div de los tick en blanco del input de los purchases, los que luego segun se tickeen o no se agregaran gastos o no. -->  
                 <!-- <div id="tick-54asd65456as4d65a4sd865" class="genericTick square activate"><i class="fa fa-check"></i></div> -->
-
-
             </div>
+
+            <div class="icons-container">
+                <div class="refresh-icon" id="btn-refresh">
+                    <i class="fa-solid fa-arrow-rotate-right"></i>
+                </div>
+                
+            </div>
+            
+            <!-- <div>
+                <p>H</p><i class="fa-solid fa-arrows-rotate" id="refresh-icon"></i>
+            </div> -->
            
         </div>
         <button class="btn inactive" id="btn-add-purchase">Add <i class="fa fa-coins"></i>+</button>

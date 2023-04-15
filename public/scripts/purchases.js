@@ -1,5 +1,4 @@
-saludarIV()
-saludarPF()
+
 console.log("hola desde purchases.js")
 const billStringId = localStorage.getItem('billStringId')
 const token = localStorage.getItem('accessToken')
@@ -14,6 +13,10 @@ const btnAddPurchase =document.getElementById('btn-add-purchase')
 const genericTicks = document.getElementsByClassName('genericTick')
 const purchaseContainer = document.getElementById('purchase-container')
 const purchaseRowsContainer = document.getElementById('purchase-rows-container')
+const btnRefresh = document.getElementById('btn-refresh')
+
+
+
 
 backBtn.addEventListener('click',()=>{
     location.href = './billMain.html'
@@ -54,17 +57,7 @@ function updateParticipantsHeader(){
         console.error('Error al recuperar el valor de CODE', error);
     })
 }
-//defino la funcion que me habilita/deshabilita el boton submit de un 
 
-function inputsValidation(){
-    if ((concept.value !== '' ) && (verifyFloatable(amount.value)) &&(amount.value !=='')&& (pWPoptions.value !=='')){
-        btnAddPurchase.classList.remove('inactive')
-        btnAddPurchase.disabled = false
-    }else {
-        btnAddPurchase.classList.add('inactive')
-        btnAddPurchase.disabled = true
-    }
-}
 
 
 
@@ -138,7 +131,7 @@ async function showPurchase(purchaseStringId){
         body: JSON.stringify({"accessToken":token,'billStringId':billStringId,"purchaseStringId":purchaseStringId})
     })
     const {concept,amount,payer} = await res1.json() // no entiendo muy bien por que necesito poner el await aca, pq en teoria con el anterior deberia esperar, pero bueno. si no lo devuelvo me da "pending"
-    console.log(concept,amount,payer)
+    
     
     const res2 = await fetch('http://localhost:3000/get-bill-participants',{
         method: 'POST',
@@ -197,6 +190,11 @@ async function showAllPurchases(){
     //dataRes.purchasesStringId.forEach(async(purchaseId) => await showPurchase(purchaseId) )  //esto funciona pero los crea en cualquier orden. forEach no asegura ejecutar en el orden que estan los elementos en el array.
     return null
 }
+//doy funcionalidad al boton refresh
+btnRefresh.addEventListener('click',()=>{
+    resetInputs()
+})
+
 
 //ejecuto todas las funciones.
 

@@ -19,6 +19,7 @@ function addSquareToHeader(id){
     div.innerHTML='<i class="fa fa-check"></i>'
     div.addEventListener('click',()=>{
         div.classList.toggle('activate')
+        inputsValidation()
     })
     gTC.appendChild(div)
 }
@@ -43,9 +44,40 @@ function resetInputs(){
     concept.value = ''
     amount.value = ''
     pWPoptions.value = ''
-    ticksGenericos = document.querySelectorAll('genericTick')
-    ticksGenericos.forEach(tick => tick.classList.add('activate'))
+    ticksGenericos = document.querySelectorAll('.genericTick')
+    ticksGenericos.forEach(tick => {tick.classList.add('activate')})
+    inputsValidation()
 }
+
+
+
+//defino la funcion que me habilita/deshabilita el boton submit de un 
+
+function inputsValidation(){
+    if ((concept.value !== '' ) && (verifyFloatable(amount.value)) &&(amount.value !=='')&& (pWPoptions.value !=='')){
+        let bandera = false
+        ticksGenericos = document.querySelectorAll('.genericTick')
+        ticksGenericos.forEach(tick => {
+            if(tick.classList.contains('activate')){
+                bandera = true //si bandera es true, es que al menos hay un tick activo (osea el gasto esta asignado a alguien)
+            }
+        })
+        if(bandera){
+            btnAddPurchase.classList.remove('inactive')
+            btnAddPurchase.disabled = false 
+        } else {
+            btnAddPurchase.classList.add('inactive')
+            btnAddPurchase.disabled = true
+        }
+
+    }else {
+        btnAddPurchase.classList.add('inactive')
+        btnAddPurchase.disabled = true
+    }
+}
+
+
+
 
 //esta funcion busca en el array usersArray el string y devuelve el name correspondiente
 
@@ -86,6 +118,18 @@ function createPurchaseRow(purchaseStringId,concept,amount,payer,allBillParticip
     const divTicksContainer = document.createElement('div')
     divTicksContainer.classList.add('purchase-afect-color')
 
+    const divIcons = document.createElement('div')
+    divIcons.classList.add('icons-container')
+    divIcons.innerHTML = `
+    <div class="edit-icon">
+        <i class="fa-solid fa-pencil"></i>
+    </div>
+    <div class="trash-icon">
+        <i class="fa-solid fa-trash"></i>
+    </div>
+    `
+    divContainer.appendChild(divIcons)
+
     allBillParticipants.forEach(participant => {
         
         const divParticipantSquare = document.createElement('div')
@@ -97,8 +141,7 @@ function createPurchaseRow(purchaseStringId,concept,amount,payer,allBillParticip
         }
         
         divParticipantSquare.addEventListener('click',async() => {
-
-            
+    
             //hago el toggle en la base de datos.
             const res = await fetch("http://localhost:3000/toggle-participant-in-purchase",{
             method: 'POST',
