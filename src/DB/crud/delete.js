@@ -46,8 +46,12 @@ async function deleteParticipantFromBill(billStringID,participantStringId){
   let participantId = participantStringId
   if(ObjectId.isValid(participantStringId)){
     participantId = new ObjectId(participantStringId)
+    await User.updateOne(
+      {_id:participantId},
+      {$pull:{bills:billObjectId}}
+      )
   }
-  Bill({})
+  
   //aca hago todas las operaciones con una sola conexion a la BD
   await Bill.bulkWrite(
     [
