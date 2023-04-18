@@ -57,7 +57,7 @@ router.post("/get-bill-participants", async (req,res)=>{
                     "billParticipantsAndMails":participantsAndMails,
                     "billParticipantsAlias":bill.alias
                 }
-                console.log(data)
+                //console.log(data)
                 res.send(JSON.stringify(data))
             } else {
                 res.send("the user is not in the bill")
@@ -359,9 +359,6 @@ router.post("/get-bill-transfers", async (req,res)=>{
             const checkValidation = await validationUserInBill(userId,billStringId)
             if(checkValidation){
                 const balances = await getBalancesByBillStringId(billStringId)
-                console.log('----2-----')
-                console.log(balances)
-                console.log('----2-----')
                 const transfers = calculateTransfers(balances)
                 res.status(200)
                 res.send(JSON.stringify(transfers))
@@ -408,13 +405,13 @@ router.delete("/delete-bill", async (req,res)=>{
 
 router.delete("/delete-participant-from-bill", async (req,res)=>{
     try{
-        const {accessToken,billStringId,purchaseStringId} = await req.body
+        const {accessToken,billStringId,participantStringId} = await req.body
         const validationResult = await tokenValidator(accessToken)
         if(validationResult){
             const userId = validationResult.SubId
             const checkValidation = await validationUserInBill(userId,billStringId)
             if(checkValidation){
-                await deleteParticipantFromBill(billStringId,purchaseStringId)
+                await deleteParticipantFromBill(billStringId,participantStringId)
                 res.status(200)
             } else {
                 res.send("the user is not in the bill")
@@ -458,8 +455,6 @@ router.delete("/delete-purchase-from-bill", async (req,res)=>{
 })
 
 
-//{"concept": null, "amount":null,"payer":null}
-//getPurchasesStrIdInBill()
 
 
 //Ojo tengo que exportarlo asi, si le pongo --> module.exports = {router} me tira error no se pq, es decir no tengo que poner llaves.

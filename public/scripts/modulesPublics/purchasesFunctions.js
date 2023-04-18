@@ -93,6 +93,8 @@ async function deletePurchase(billStringId,purchaseStringId){
     }
     console.log(`estas bien.. eliminando ${purchaseStringId}`)
 }
+
+//aca va la funcion de editar los gastos.
 function editPurchase(billStringId,purchaseStringId){
     alert(`Sorry!\nThis funcionality is not avaible yet.\nBut you are trying to edit the purchase with id=${purchaseStringId}, in the bill with id=${billStringId}`)
     
@@ -156,7 +158,7 @@ function createPurchaseRow(purchaseStringId,concept,amount,payer,allBillParticip
     divTrash.id = `trash-${purchaseStringId}`
     divTrash.addEventListener('click',async ()=>{
        await deletePurchase(billStringId,purchaseStringId)
-       await showAllPurchases()
+       document.getElementById(`purchase-${purchaseStringId}`).remove()
     })
     
     //agrego cada div donde corresponde.

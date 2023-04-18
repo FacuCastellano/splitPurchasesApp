@@ -159,6 +159,11 @@ async function addPurchaseToBill(strBillId,purchaseToAdd){
             participants:participants
         }
         await Bill.updateOne({_id:billId}, {$addToSet: {purchases: purchase }})
+        
+        // const newPurchaseId = result.upsertedId._id.toString();
+        // return res.json({ newPurchaseId });
+        
+        
         return true
     }catch(err){
         console.log("ha ocurrido el siguiente error en la funcion addBillToUser.")
@@ -240,31 +245,32 @@ async function makeBalance(strBillId){
     try{
         const billObjectId = new ObjectId(strBillId)
         const bill = await Bill.findOne({"_id":billObjectId})
+        console.log(bill)
         const allPurchases = bill.purchases
         const n = allPurchases.length
-        const balances = {}
+        const balancesNew = {}
         //seteo los balances en 0
         for(index in bill.participants){
-            balances[bill.participants[index].toString()] = {'mustPay':0,'payed':0,'balance':0}
+            balancesNew[bill.participants[index].toString()] = {'mustPay':0,'payed':0,'balance':0}
         }
+        console.log('----1-----')
+        console.log(allPurchases)
+
         //en cada purchase voy sumando lo que le corresponde pagar a cada uno y asigno el amount al payer, cuando termine este ciclo for voy a tener el mustPay y el payed
         for (index in allPurchases){
             const purchase = allPurchases[index]
             const amount = purchase.amount
             const payer = purchase.payer
             const purchaseParticipants = purchase.participants
-            
+
             if(amount > 0 && purchaseParticipants.length > 0){
                 const averageAmount = amount / purchaseParticipants.length
-                
-                
-                balances[payer]['payed'] += amount
+                balancesNew[payer]['payed'] += amount
                 for(partIndex in purchaseParticipants){
                     const participant = purchaseParticipants[partIndex]
-                    balances[participant]['mustPay'] += averageAmount //asd
+                    balancesNew[participant]['mustPay'] += averageAmount
                 }
-
-
+                
             }else{
                 //aca deberia arreglar mejor esto
                 console.log(`${purchase.concept} no se tuvo en cuenta por ser un amount no valido o por no estar asignado a ningun parcipante`)
@@ -272,26 +278,25 @@ async function makeBalance(strBillId){
         }
         //en cada participante calculo el balance final. 
         for(index in bill.participants){
-            balances[bill.participants[index]]['balance'] = balances[bill.participants[index]]['payed']-balances[bill.participants[index]]['mustPay']
+            balancesNew[bill.participants[index]]['balance'] = balancesNew[bill.participants[index]]['payed']-balancesNew[bill.participants[index]]['mustPay']
         }
         //reemplazo el balance previo por el nuevo.
         await Bill.updateOne(
             { _id: billObjectId },
-            {
-              $set: {
-                [`balances`]: balances, // tengo que usar "$set" y seteo un nuevo atributo (como plus me da que no puedo agregar dos participantes iguales, pq la segunda vez reemplaza, y por ende elimina la primera.), ($push es para arrays, no para objetos.), con claves los [] en la definicion de la key
-              },
-            },
+            { balances: balancesNew},
             { upsert: false }
         )
 
         bill.save()
 
     }catch(err){
-        
+        console.log('tiro error')
+        console.log(err)
     } 
 
 }
+
+//makeBalance('643dc975d39ffe64186bf58f')
 
 
 module.exports = { 

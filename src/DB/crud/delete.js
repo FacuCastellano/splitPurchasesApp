@@ -41,11 +41,13 @@ async function deleteBill(billStringId) {
 }
 
 async function deleteParticipantFromBill(billStringID,participantStringId){
+  console.log("borrando a: ",participantStringId,"\nDe la cuenta: ",billStringID )
   const billObjectId = new ObjectId(billStringID)
   let participantId = participantStringId
   if(ObjectId.isValid(participantStringId)){
     participantId = new ObjectId(participantStringId)
   }
+  Bill({})
   //aca hago todas las operaciones con una sola conexion a la BD
   await Bill.bulkWrite(
     [
@@ -55,27 +57,42 @@ async function deleteParticipantFromBill(billStringID,participantStringId){
           filter: { _id: billObjectId },
           update: { $pull: { participants: participantId } }
         }
-      },
-      //elimino todos los gastos que lo tengan como pagador (elimino el gasto totalmente)
+      }
+      ,
+      //elimino al alias de 
+      {
+        updateOne: {
+          filter: { _id: billObjectId },
+          update: { $unset: { ["alias." + participantStringId]: "" } },
+        },
+      }
+      ,
+      //elimino todos los gastos que lo tengan como pagador (elimino el gasto totalmente) 
       {
         updateMany: {
           filter: {  _id: billObjectId, "purchases.payer": participantStringId },
           update: { $pull: { purchases: { payer: participantStringId } } }
         }
-      },
+       }
+      ,
       //lo elimino a la persona de todos los gastos que participo. (no elimino el gasto solo al participante)
       {
         updateMany: {
-          filter: { _id: billObjectId, "purchases.participants": participantStringId },
-          update: { $pull: { "purchases.$.participants": participantStringId } }
-        }
+          filter: { _id: billObjectId },
+          update: {
+            $pull: { "purchases.$[purchase].participants": participantStringId },
+          },
+          arrayFilters: [{ "purchase.participants": participantStringId }],//esta linea es clave para que elimine de todos los purchases, sino elimina solo del primero.
+        },
       }
     ]
   )
   //Rehago el balance.
   await makeBalance(billStringID)
-  
+  console.log("en teoria todo ok")
 }
+
+
 
 async function deletePurchaseFromBill(billStringID,purchaseStringId){
   const billObjectId = new ObjectId(billStringID)
@@ -93,7 +110,7 @@ async function deletePurchaseFromBill(billStringID,purchaseStringId){
 
 
 
-//deleteParticipantFromBill("6436a06e2db10265cc469dab","64317dfa41891b318bcffac5")
+//deleteParticipantFromBill("643d76d04d00053061ca9945","carbel") 
 
 module.exports ={
   deleteBill,

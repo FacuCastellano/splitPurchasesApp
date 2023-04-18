@@ -16,13 +16,54 @@ backBtn.addEventListener('click',()=>{
     location.href = './billMain.html'
 })
 
+function GetEmailById(userStringId, arrayUsersIdAndMail) {
+    const newArrayWhitFindedUser = arrayUsersIdAndMail.filter(dato => dato[0] === userStringId);
+    return newArrayWhitFindedUser.length ? newArrayWhitFindedUser[0][1] : null;
+  }
+
+async function  deleteParticipant(billStringId,participantStringId){
+
+    const url = 'http://localhost:3000/delete-participant-from-bill'
+    fetch(url,{
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"accessToken":token,'billStringId':billStringId,'participantStringId':participantStringId})
+    })
+    .then(()=>{
+        document.getElementById(`participant-${participantStringId}`).remove()
+    }) 
+    .catch(error => {
+        console.error('Error en la funcion deleteBill()', error);
+    })
+
+    console.log("eliminar participante: ",participantStringId,'\nDe la cuenta: ',billStringId)
+}
+
 
 //genero una funcion para que me cree los elementos participants para mostrar.
-function createDivParticipant(participantAlias,participantMail='Not user Registered'){
-
+function createDivParticipant(stringId,alias,email='Not user Registered'){
+    const aliasShowed = alias.charAt(0).toUpperCase() + alias.slice(1).toLowerCase()
     const div = document.createElement('div')
     div.classList.add("participant")
-    div.innerHTML = `<i class="fas fa-times delete-icon"></i>&nbsp;<span>${participantAlias}</span>&nbsp;-&nbsp;<span class="mail-addres">${participantMail}</span>`
+    div.id = `participant-${stringId}`
+    div.innerHTML = `
+    <div>
+        &nbsp;<span>${aliasShowed}</span>&nbsp;-&nbsp;<span class="mail-addres">${email}</span>
+    </div>  `
+    //icono trash
+    const divTrash = document.createElement('div')
+    divTrash.innerHTML = `<i class="fa-solid fa-trash"></i>`
+    divTrash.classList.add('trash-icon')
+    divTrash.id = `trash-${stringId}`
+    divTrash.addEventListener('click',async ()=>{
+       await deleteParticipant(billStringId,stringId)
+       
+    })
+    div.appendChild(divTrash)
+   
+    
     participantsContainer.appendChild(div)
 }
 
@@ -46,18 +87,13 @@ function updateParticipantsView(){
             location.href = './index.html'
         } else {
             participantsContainer.innerHTML = ''  
-            const alias = data.billParticipantsAlias
-            
-            data.billParticipantsAndMails.forEach(participant => {
-
-
-                const participantAlias = alias[participant[0]].charAt(0).toUpperCase() + alias[participant[0]].slice(1).toLowerCase()
-                const participantMail = participant[1] && participant[1].trim() !== '' ? participant[1] : 'Not user registered'
-                if(participantMail){
-
-                }
-                createDivParticipant(participantAlias,participantMail)
-            });
+            const ParticipantsId = Object.keys(data.billParticipantsAlias)
+            ParticipantsId.forEach(participant =>{
+               // const stringId = participant
+                const alias = data.billParticipantsAlias[participant]
+                const mail = GetEmailById(participant, data.billParticipantsAndMails) ? GetEmailById(participant, data.billParticipantsAndMails) : "Not user registered" 
+                createDivParticipant(participant,alias,mail)
+            })
         }
     })
     .catch(error => {

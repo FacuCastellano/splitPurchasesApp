@@ -134,7 +134,7 @@ hr.light-line{
     flex-direction: column;
 }
 .participant{
-    padding: 0px 5px;
+    padding: 2px 5px;
     width:auto;
     margin:7px;
     background-color: rgb(211, 234, 241); 
@@ -143,9 +143,28 @@ hr.light-line{
     font-weight: bolder;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     
 } 
+
+.trash-icon{
+    border:2px solid black;
+    padding:3px;
+    margin:0px;
+    border-radius: 3px;
+    color: black;
+    font-weight: lighter;
+    background-color: rgb(189, 179, 179);
+    opacity: 0.2;
+    align-self: end;
+}
+
+.trash-icon:hover{
+    background-color: tomato;
+    opacity: 1;
+}
+
+
 
 .delete-icon{
     color:white;

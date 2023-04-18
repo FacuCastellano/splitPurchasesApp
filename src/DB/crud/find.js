@@ -326,14 +326,13 @@ async function getBalancesByBillStringId(billStringId){
         const billObjectId = new ObjectId(billStringId)
         const bill = await Bill.findOne({_id:billObjectId})        
         const balances = bill.balances
-        const alias = bill.alias
+        //const alias = bill.alias
         //agrego el nombre del participante para enviarlo con los balances.
         const participants = Object.keys(balances)
         for(index in participants){
             //const participantName = 'puky'//await getUserNameByStringId(participants[index])
             balances[participants[index]].alias = bill.alias[participants[index]]
         }
-        console.log(balances)
         return balances
     }catch(err){
         //aca pueden pasar varior errores, lo importante es q devuelva (null) cuando se le pasa algo que no es un StingId valido o existente.

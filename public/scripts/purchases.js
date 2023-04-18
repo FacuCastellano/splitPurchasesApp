@@ -16,8 +16,6 @@ const purchaseRowsContainer = document.getElementById('purchase-rows-container')
 const btnRefresh = document.getElementById('btn-refresh')
 
 
-
-
 backBtn.addEventListener('click',()=>{
     location.href = './billMain.html'
 })
@@ -73,9 +71,10 @@ document.body.addEventListener('change',()=>{
 })
 
 
+
 //creo la funcion para agregar un purchase a una base de datos. 
 
-function addPurchaseToDB(){
+async function addPurchaseToDB(){
 
     const payer = pWPoptions.value
     const participants= [] //["6410d3579f927194a5335203","6410d3579f927194a5335205","tose","gon"]
@@ -94,7 +93,7 @@ function addPurchaseToDB(){
     }
 
     const url = 'http://localhost:3000/add-purchase-to-bill'
-    fetch(url,{
+    await fetch(url,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -104,8 +103,11 @@ function addPurchaseToDB(){
     .then(res=>{
         if (res.status === 200){
             console.log("purchase cargado")
+    //ACA TENGO QUE AGREGAR LA VISUALIZACION DEL GASTO, EVITANDO USAR showAllPurchases()
+            //showPurchase(purchase)
             resetInputs()
             showAllPurchases()
+            
         } else{
             console.log("error en la carga del purchase.")
         }
@@ -116,8 +118,8 @@ function addPurchaseToDB(){
     })
 }
 
-btnAddPurchase.addEventListener("click",()=>{
-    addPurchaseToDB()
+btnAddPurchase.addEventListener("click", async () =>{ 
+    await addPurchaseToDB()
 })
 
 //esta funcion recibe el stringId como argumento, y visualiza el purchase, dandole algunas funcionalidades.
@@ -156,15 +158,14 @@ async function showPurchase(purchaseStringId){
     const dataRes3 = await res3.json()
     const purchaseParticipants = dataRes3.purchaseParticipants
     //console.log(concept,amount,payer)
-    // console.log(allBillParticipants)
-    // console.log(purchaseParticipants)
+    //console.log(allBillParticipants)
+    //console.log(purchaseParticipants)
     createPurchaseRow(purchaseStringId,concept,parseFloat(amount/100),payer,allBillParticipants,purchaseParticipants)
 
 }
 
 function deletePurchasesView(){
     const previousPurchases = document.querySelectorAll(".deletable")
-    
     previousPurchases.forEach(element =>{
         element.remove()
     })
@@ -181,7 +182,7 @@ async function showAllPurchases(){
         body: JSON.stringify({"accessToken":token,'billStringId':billStringId})
     })
     const dataRes = await res.json()
-    console.log("aca van los gastos!")
+    
     console.log(dataRes.purchasesStringId)
     for(index in dataRes.purchasesStringId){
         const purchase = dataRes.purchasesStringId[index]

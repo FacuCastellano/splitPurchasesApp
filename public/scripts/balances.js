@@ -24,17 +24,17 @@ function showParticipantBalance(participant){
 
     const divParticipant = document.createElement('div')
     divParticipant.classList.add('personal-balance-participant')
-    divParticipant.innerHTML = `<div>${nameParticipant}</div> <div>${mustPay.toFixed(2)}</div> <div>${payed.toFixed(2)}</div>` //recodar que toFixed(), devuelve el float redondeado pero como un string.
+    divParticipant.innerHTML = `<div>${nameParticipant}</div> <div>$${mustPay.toFixed(2)}</div> <div>$${payed.toFixed(2)}</div>` //recodar que toFixed(), devuelve el float redondeado pero como un string.
     const divPB = document.createElement('div') // divPB = PersonalBalance
     if(balance == 0){
         divPB.innerText = `Settle`
         divParticipant.style.backgroundColor = '#CCCCCC'
         divParticipant.style.color = 'rgb(40,40,40)'
     }else if(balance > 0 ){
-        divPB.innerText = `Recover ${balance.toFixed(2)}`
+        divPB.innerText = `Recover $${balance.toFixed(2)}`
         divParticipant.style.backgroundColor = 'rgb(196,215,183)'
     } else if (balance < 0){
-        divPB.innerText = `Owe ${-balance.toFixed(2)}`
+        divPB.innerText = `Owe $${-balance.toFixed(2)}`
         divParticipant.style.backgroundColor = 'rgb(234,190,190)'
     }
     divParticipant.appendChild(divPB)
@@ -73,6 +73,7 @@ function getBalances(){
             //console.log("el token es un objeto vacio {}")
             location.href = './index.html'
         } else {
+
             const participantsIds = Object.keys(data)
             for(index in participantsIds){
                 showParticipantBalance(data[participantsIds[index]])
@@ -83,4 +84,5 @@ function getBalances(){
         console.error('Error al recuperar el valor de CODE', error);
     })
 }
+
 getBalances()
