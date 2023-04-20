@@ -34,6 +34,28 @@ const homeBtn = document.getElementById('home-button')
 homeBtn.addEventListener('click',()=>{
     location.href = './myBills.html'
 })
+// creo la interaccion con los vontes del menu desplegable
+const goBillMenuBtn = document.getElementById('bill-menu-button')
+goBillMenuBtn.addEventListener('click',()=>{
+    location.href = './billMain.html'
+})
+const goParticipantsBtn = document.getElementById('participant-button')
+goParticipantsBtn.addEventListener('click',()=>{
+    location.href = './participants.html'
+})
+const goBalancesBtn = document.getElementById('balances-button')
+goBalancesBtn.addEventListener('click',()=>{
+    location.href = './balances.html'
+})
+const goTransfersBtn = document.getElementById('transfers-button')
+goTransfersBtn.addEventListener('click',()=>{
+    location.href = './transfers.html'
+})
+const logoutBtn = document.getElementById('logout-button')
+logoutBtn.addEventListener('click',()=>{
+    location.href = './index.html'
+})
+
 
 // backBtn.addEventListener('click',()=>{
 //     location.href = './billMain.html'

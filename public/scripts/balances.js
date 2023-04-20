@@ -3,13 +3,6 @@ const billStringId = localStorage.getItem('billStringId')
 const token = localStorage.getItem('accessToken')
 const backBtn = document.getElementById('back-button')
 const balanceContainer = document.getElementById('personal-balance-container')
-const div1 = document.createElement('div')
-// div1.classList.add('head')
-// div1.innerHTML='<h2> Personal Balance </h2>'
-// const div2 = document.createElement('div')
-// div2.classList.add('personal-balance-title')
-// div2.innerHTML='<div>Participant</div> <div>Must Pay</div> <div>Payed Done</div> <div>Balance</div>'
-// const hr = document.createElement('hr')
 
 //creo la interaccion con el muenu desplegable.
 const menuBtn = document.getElementById('menu-button')
@@ -30,12 +23,29 @@ const homeBtn = document.getElementById('home-button')
 homeBtn.addEventListener('click',()=>{
     location.href = './myBills.html'
 })
+// creo la interaccion con los vontes del menu desplegable
+const goBillMenuBtn = document.getElementById('bill-menu-button')
+goBillMenuBtn.addEventListener('click',()=>{
+    location.href = './billMain.html'
+})
+const goParticipantsBtn = document.getElementById('participant-button')
+goParticipantsBtn.addEventListener('click',()=>{
+    location.href = './participants.html'
+})
+const goPurchasesBtn = document.getElementById('purchases-button')
+goPurchasesBtn.addEventListener('click',()=>{
+    location.href = './purchases.html'
+})
+const goTransfersBtn = document.getElementById('transfers-button')
+goTransfersBtn.addEventListener('click',()=>{
+    location.href = './transfers.html'
+})
+const logoutBtn = document.getElementById('logout-button')
+logoutBtn.addEventListener('click',()=>{
+    location.href = './index.html'
+})
 
 
-
-// backBtn.addEventListener('click',()=>{
-//     location.href = './billMain.html'
-// })
 
 
 function showParticipantBalance(participant){
@@ -64,19 +74,6 @@ function showParticipantBalance(participant){
     balanceContainer.appendChild(divParticipant)
 
 }
-
-async function showBalances(){
-    balanceContainer.innerHTML = ''
-    balanceContainer.appendChild(div1)
-    balanceContainer.appendChild(div2)
-    balanceContainer.appendChild(hr)
-
-}
-
-showBalances()
-// showParticipantBalance(facu)
-// showParticipantBalance(mono)
-// showParticipantBalance(tose)
 
 
 function getBalances(){

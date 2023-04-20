@@ -33,10 +33,30 @@ homeBtn.addEventListener('click',()=>{
     location.href = './myBills.html'
 })
 
-// backBtn.addEventListener('click',()=>{
-//     location.href = './billMain.html'
-// })
+// creo la interaccion con los vontes del menu desplegable
+const goBillMenuBtn = document.getElementById('bill-menu-button')
+goBillMenuBtn.addEventListener('click',()=>{
+    location.href = './billMain.html'
+})
+const goPurchasesBtn = document.getElementById('purchases-button')
+goPurchasesBtn.addEventListener('click',()=>{
+    location.href = './purchases.html'
+})
+const goBalancesBtn = document.getElementById('balances-button')
+goBalancesBtn.addEventListener('click',()=>{
+    location.href = './balances.html'
+})
+const goTransfersBtn = document.getElementById('transfers-button')
+goTransfersBtn.addEventListener('click',()=>{
+    location.href = './transfers.html'
+})
+const logoutBtn = document.getElementById('logout-button')
+logoutBtn.addEventListener('click',()=>{
+    location.href = './index.html'
+})
 
+
+//
 function GetEmailById(userStringId, arrayUsersIdAndMail) {
     const newArrayWhitFindedUser = arrayUsersIdAndMail.filter(dato => dato[0] === userStringId);
     return newArrayWhitFindedUser.length ? newArrayWhitFindedUser[0][1] : null;

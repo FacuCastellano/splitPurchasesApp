@@ -24,6 +24,27 @@ homeBtn.addEventListener('click',()=>{
     location.href = './myBills.html'
 })
 
+// creo la interaccion con los vontes del menu desplegable
+const goBillMenuBtn = document.getElementById('bill-menu-button')
+goBillMenuBtn.addEventListener('click',()=>{
+    location.href = './billMain.html'
+})
+const goParticipantsBtn = document.getElementById('participant-button')
+goParticipantsBtn.addEventListener('click',()=>{
+    location.href = './participants.html'
+})
+const goPurchasesBtn = document.getElementById('purchases-button')
+goPurchasesBtn.addEventListener('click',()=>{
+    location.href = './purchases.html'
+})
+const goBalancesBtn = document.getElementById('balances-button')
+goBalancesBtn.addEventListener('click',()=>{
+    location.href = './balances.html'
+})
+const logoutBtn = document.getElementById('logout-button')
+logoutBtn.addEventListener('click',()=>{
+    location.href = './index.html'
+})
 
 function showTransfers(transfersArray){
     severancePayContainer.innerHTML = ''
@@ -35,7 +56,14 @@ function showTransfers(transfersArray){
         const amount = (transfer[1]/100).toFixed(2)
         const divTransfer = document.createElement('div')
         divTransfer.classList.add('severance-pay-row')
-        divTransfer.innerHTML =`<div>${debtor}</div> <div>${amount}</div> <div>${creditor}</div> <div class="divIcon"><i class="fa-solid fa-money-bill-transfer transfer-icon"></i></div>`
+        divTransfer.innerHTML =`<div>${debtor}</div> <div>${amount}</div> <div>${creditor}</div> `
+        const divIcon =document.createElement('div')
+        divIcon.classList.add('divIcon')
+        divIcon.innerHTML = `<i class="fa-solid fa-money-bill-transfer transfer-icon"></i>`
+        divIcon.addEventListener('click',()=>{
+            alert('Sorry!\nThis feature is not avaible yet')
+        })
+        divTransfer.appendChild(divIcon)
         severancePayContainer.appendChild(divTransfer)
     }
 }
