@@ -6,21 +6,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Split Purchases | Balances</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
-    
+    <script src="https://kit.fontawesome.com/ef08a0a447.js" crossorigin="anonymous"></script>
     <link rel='stylesheet' type="text/css" href='../stylesheets/balances.css'/>
    
 
     <!-- <link rel='stylesheet' type="text/css" href='/home/facu/Escritorio/programacion/proyectosPropios/blog/public/stylesheets/userMain.css'/>   -->
 </head>
 <body>
-    <div class="container" id="personal-balance-container">
-        <!-- Todo esto (incluido los encabezados de la tabla se llena desde JS) -->
-        
-    </div>
+    <div class="main-container">
 
-    <button class="btn-back" type="button" id="back-button" >
+        <!-- aca pongo el menu lateral -->
+        <div class="optionsMenu inactive" id="menu">
+            <div class="menu-elements-container" id="menu-elements-container">
+                <div class="menu-item ">Opcion 1</div>
+                <div class="menu-item ">Opcion 2</div>
+                <div class="menu-item ">Opcion ...</div>
+                <div class="menu-item ">Opcion ...</div>
+                <div class="menu-item " id="delete-button">Delete Bill</div>
+            </div>
+            
+        </div>
+
+        <div class="title-container">
+
+            <div class="title-subcontainer-1">
+                <div class="icon-container">
+                    <i class="fa-solid fa-bars" id="menu-button"></i>
+                </div>
+
+                <h2> <var>Personal Balances</var></h2>
+                
+                <div class="icon-container" id="home-button">
+                    <i class="fa-solid fa-house" ></i>
+                </div>
+            </div>
+            <hr>
+            <div class="title-subcontainer-2">
+                <div>Participant</div>
+                <div>Must Pay</div>
+                <div>Payed Done</div>
+                <div>Balance</div>
+            </div>
+
+        </div>
+
+        <div class="balances-container" id="personal-balance-container">
+            
+            
+        </div>
+    </div>
+    
+
+    <!-- <button class="btn-back" type="button" id="back-button" >
         Back
-    </button>
+    </button> -->
 
     <script src="../scripts/balances.js" ></script>
 </body>

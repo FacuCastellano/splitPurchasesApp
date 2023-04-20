@@ -1,11 +1,11 @@
 const token = localStorage.getItem('accessToken')
 const inputNewBIll = document.getElementById('inputBillTitle')
 const btnCreate = document.getElementById('btn-inputBillTitle')
-const backBtn = document.getElementById('back-button')
+const homeBtn = document.getElementById('home-button')
 const inputAdminAlias = document.getElementById('inputAdminAlias')
 
-backBtn.addEventListener('click',()=>{
-    location.href = './userMain.html'
+homeBtn.addEventListener('click',()=>{
+    location.href = './myBills.html'
 })
 
 

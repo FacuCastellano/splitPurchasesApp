@@ -23,12 +23,37 @@ logoutBtn.addEventListener('click',()=>{
     location.href = './index.html'
 })
 
+// menuBtn.addEventListener('click',()=>{
+//     menu.classList.remove('inactive')
+// })
+// menu.addEventListener('mouseleave',()=>{
+//     menu.classList.add('inactive')
+// })
+
+//creo la interaccion con el muenu desplegable.
+// const menuBtn = document.getElementById('menu-button')
+// const menu = document.getElementById('menu')
+menuElementContainer= document.getElementById('menu-elements-container')
+menuElementContainer.style.display = 'none'
+
 menuBtn.addEventListener('click',()=>{
     menu.classList.remove('inactive')
+    menuElementContainer.style.display = 'block'
 })
 menu.addEventListener('mouseleave',()=>{
     menu.classList.add('inactive')
+    menuElementContainer.style.display = 'none'
 })
+//creo la interaccion con el boton home
+// const homeBtn = document.getElementById('home-button')
+// homeBtn.addEventListener('click',()=>{
+//     location.href = './myBills.html'
+// })
+
+
+
+
+
 
 
 //genero una funcion para que me cree los elementos bill para mostrar.

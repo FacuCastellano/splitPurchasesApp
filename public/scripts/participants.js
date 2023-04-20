@@ -12,9 +12,30 @@ const participantsContainer = document.getElementById('participants-container')
 const billStringId = localStorage.getItem('billStringId')
 const token = localStorage.getItem('accessToken')
 
-backBtn.addEventListener('click',()=>{
-    location.href = './billMain.html'
+
+//creo la interaccion con el muenu desplegable.
+const menuBtn = document.getElementById('menu-button')
+const menu = document.getElementById('menu')
+menuElementContainer= document.getElementById('menu-elements-container')
+menuElementContainer.style.display = 'none'
+
+menuBtn.addEventListener('click',()=>{
+    menu.classList.remove('inactive')
+    menuElementContainer.style.display = 'block'
 })
+menu.addEventListener('mouseleave',()=>{
+    menu.classList.add('inactive')
+    menuElementContainer.style.display = 'none'
+})
+//creo la interaccion con el boton home
+const homeBtn = document.getElementById('home-button')
+homeBtn.addEventListener('click',()=>{
+    location.href = './myBills.html'
+})
+
+// backBtn.addEventListener('click',()=>{
+//     location.href = './billMain.html'
+// })
 
 function GetEmailById(userStringId, arrayUsersIdAndMail) {
     const newArrayWhitFindedUser = arrayUsersIdAndMail.filter(dato => dato[0] === userStringId);

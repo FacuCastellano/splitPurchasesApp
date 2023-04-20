@@ -21,8 +21,6 @@ menu.addEventListener('mouseleave',()=>{
 
 
 
-
-
 //envio la peticion al servidor para obtener el nombre de la Bill.
 const url = 'http://localhost:3000/get-bill-title'
 fetch(url,{

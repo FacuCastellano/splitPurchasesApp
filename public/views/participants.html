@@ -13,10 +13,31 @@
 </head>
 <body>
 
-    <div class="container" id="partContainer">
+    <div class="main-container" id="partContainer">
         
-        <div class="head">
-            <h2> Participants</h2>
+        <!-- aca pongo el menu lateral -->
+
+        <div class="optionsMenu inactive" id="menu">
+            <div class="menu-elements-container" id="menu-elements-container">
+                <div class="menu-item ">Opcion 1</div>
+                <div class="menu-item ">Opcion 2</div>
+                <div class="menu-item ">Opcion ...</div>
+                <div class="menu-item ">Opcion ...</div>
+                <div class="menu-item " id="delete-button">Delete Bill</div>
+            </div>
+            
+        </div>
+
+        <div class="title-container">
+            <div class="icon-container">
+                <i class="fa-solid fa-bars" id="menu-button"></i>
+            </div>
+            
+            <h2> <var>Participants </var></h2>
+            
+            <div class="icon-container" id="home-button">
+                <i class="fa-solid fa-house" ></i>
+            </div>
         </div>
 
         <hr>
@@ -70,9 +91,9 @@
       
     </div>
 
-    <button class="btn-back" type="button" id="back-button" >
+    <!-- <button class="btn-back" type="button" id="back-button" >
         Back
-    </button>
+    </button> -->
 
     <script src="../scripts/participants.js"></script>
 </body>

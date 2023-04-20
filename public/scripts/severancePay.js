@@ -1,29 +1,32 @@
 const billStringId = localStorage.getItem('billStringId')
 const token = localStorage.getItem('accessToken')
-const severancePayContainer = document.getElementById('severance-pay-container')
-const backBtn = document.getElementById('back-button')
+const severancePayContainer = document.getElementById('trasnfer-container')
 
 
-const div1 = document.createElement('div')
-div1.classList.add('head')
-div1.innerHTML = '<h2> Severance Pay </h2>'
 
-const div2 = document.createElement('div')
-div2.classList.add('severance-pay-title')
-div2.innerHTML = '<div>Debtor</div> <div>Amount</div> <div>Beneficiary</div>'
-hr = document.createElement('hr')
+//creo la interaccion con el muenu desplegable.
+const menuBtn = document.getElementById('menu-button')
+const menu = document.getElementById('menu')
+menuElementContainer= document.getElementById('menu-elements-container')
+menuElementContainer.style.display = 'none'
 
-
-backBtn.addEventListener('click',()=>{
-    location.href = './billMain.html'
-
+menuBtn.addEventListener('click',()=>{
+    menu.classList.remove('inactive')
+    menuElementContainer.style.display = 'block'
 })
+menu.addEventListener('mouseleave',()=>{
+    menu.classList.add('inactive')
+    menuElementContainer.style.display = 'none'
+})
+//creo la interaccion con el boton home
+const homeBtn = document.getElementById('home-button')
+homeBtn.addEventListener('click',()=>{
+    location.href = './myBills.html'
+})
+
 
 function showTransfers(transfersArray){
     severancePayContainer.innerHTML = ''
-    severancePayContainer.appendChild(div1)
-    severancePayContainer.appendChild(div2)
-    severancePayContainer.appendChild(hr)
 
     for(i in transfersArray ){
         const transfer = transfersArray[i]
@@ -32,7 +35,7 @@ function showTransfers(transfersArray){
         const amount = (transfer[1]/100).toFixed(2)
         const divTransfer = document.createElement('div')
         divTransfer.classList.add('severance-pay-row')
-        divTransfer.innerHTML =`<div>${debtor}</div> <div>${amount}</div> <div>${creditor}</div>`
+        divTransfer.innerHTML =`<div>${debtor}</div> <div>${amount}</div> <div>${creditor}</div> <div class="divIcon"><i class="fa-solid fa-money-bill-transfer transfer-icon"></i></div>`
         severancePayContainer.appendChild(divTransfer)
     }
 }

@@ -15,10 +15,29 @@ const purchaseContainer = document.getElementById('purchase-container')
 const purchaseRowsContainer = document.getElementById('purchase-rows-container')
 const btnRefresh = document.getElementById('btn-refresh')
 
+//creo la interaccion con el muenu desplegable.
+const menuBtn = document.getElementById('menu-button')
+const menu = document.getElementById('menu')
+menuElementContainer= document.getElementById('menu-elements-container')
+menuElementContainer.style.display = 'none'
 
-backBtn.addEventListener('click',()=>{
-    location.href = './billMain.html'
+menuBtn.addEventListener('click',()=>{
+    menu.classList.remove('inactive')
+    menuElementContainer.style.display = 'block'
 })
+menu.addEventListener('mouseleave',()=>{
+    menu.classList.add('inactive')
+    menuElementContainer.style.display = 'none'
+})
+//creo la interaccion con el boton home
+const homeBtn = document.getElementById('home-button')
+homeBtn.addEventListener('click',()=>{
+    location.href = './myBills.html'
+})
+
+// backBtn.addEventListener('click',()=>{
+//     location.href = './billMain.html'
+// })
 
 
 //defino la funcion que me actualiza los nombres en el encabezado, en las opciones y los cuadraditos correspondientes.

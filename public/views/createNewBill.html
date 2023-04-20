@@ -7,38 +7,50 @@
     <title>Split Purchases |New Bill</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
     <link rel='stylesheet' type="text/css" href='../stylesheets/createNewBill.css'/>   
-
+    <script src="https://kit.fontawesome.com/ef08a0a447.js" crossorigin="anonymous"></script>
     <!-- <link rel='stylesheet' type="text/css" href='/home/facu/Escritorio/programacion/proyectosPropios/blog/public/stylesheets/userMain.css'/>   -->
 </head>
 <body>
 
-    <div class="container" id="mainContainer">
+    <div class="main-container" id="mainContainer">
         
-        <div class="head">
+        <!-- <div class="head">
             <h2> Create New Bill</h2>
+        </div> -->
+        <div class="title-container">
+            <div class="icon-container">
+                <!-- <i class="fa-solid fa-bars" id="menu-button"></i> -->
+            </div>
+            
+            <h2> <var>New Bill</var></h2>
+            
+            <div class="icon-container" id="home-button">
+                <i class="fa-solid fa-house" ></i>
+            </div>
         </div>
-
+        
         <hr>
 
         <div class="input-container">
-            <h4>Write the title of the new bill.</h4>
+            <h4>Write the title of the new bill</h4>
             <div class="input-bill">
                 <input type="text" id="inputBillTitle" placeholder="New bill's title"><br>
             </div>
-            
+
+            <hr class="hr-light">
             <h4>Write the alias which you will be tagged</h4>
-            <div class="input-bill">
+            <div class="input-alias">
                 <input type="text" id="inputAdminAlias" placeholder="Write your bill's alias"><br>
             </div>
         </div>
-
-        <button class="btn btn-add" id="btn-inputBillTitle">Create +</button>
+        
+        <button class="btn btn-add" id="btn-inputBillTitle">Create Bill +<i class="fas fa-receipt" ></i></button>
       
     </div>
 
-    <button class="btn-back" type="button" id="back-button" >
+    <!-- <button class="btn-back" type="button" id="back-button" >
         Back
-    </button>
+    </button> -->
 
     <script src="../scripts/createNewBill.js"></script>
 </body>

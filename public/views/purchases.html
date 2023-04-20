@@ -14,11 +14,35 @@
     <!-- <link rel='stylesheet' type="text/css" href='/home/facu/Escritorio/programacion/proyectosPropios/blog/public/stylesheets/userMain.css'/>   -->
 </head>
 <body>
-    <div class="container" id="purchase-container">
-        <div class="main-title">
+    <div class="main-container" id="purchase-container">
+        <!-- <div class="main-title">
             <h2> Purchases </h2>
-            <!-- <button class="btn" id="btn-add-purchase">Add <i class="fa fa-coins"></i>+</button> -->
+        </div> -->
+        
+        
+        <!-- aca pongo el menu lateral -->
+        <div class="optionsMenu inactive" id="menu">
+            <div class="menu-elements-container" id="menu-elements-container">
+                <div class="menu-item ">Opcion 1</div>
+                <div class="menu-item ">Opcion 2</div>
+                <div class="menu-item ">Opcion ...</div>
+                <div class="menu-item ">Opcion ...</div>
+                <div class="menu-item " id="delete-button">Delete Bill</div>
+            </div>
         </div>
+
+        <div class="title-container">
+            <div class="icon-container">
+                <i class="fa-solid fa-bars" id="menu-button"></i>
+            </div>
+            
+            <h2> <var>Purchases</var></h2>
+            
+            <div class="icon-container" id="home-button">
+                <i class="fa-solid fa-house" ></i>
+            </div>
+        </div>
+        <hr id="hr-1">
         <div class="secondary-titles-container">
 
             <div class="concept" id="concept-title">
@@ -84,9 +108,9 @@
     
     </div>
 
-    <button class="btn-back" type="button" id="back-button" >
+    <!-- <button class="btn-back" type="button" id="back-button" >
         Back
-    </button>
+    </button> -->
 
     <script src="../scripts/purchases.js" ></script>
 </body>

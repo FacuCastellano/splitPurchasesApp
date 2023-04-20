@@ -4,16 +4,38 @@ const token = localStorage.getItem('accessToken')
 const backBtn = document.getElementById('back-button')
 const balanceContainer = document.getElementById('personal-balance-container')
 const div1 = document.createElement('div')
-div1.classList.add('head')
-div1.innerHTML='<h2> Personal Balance </h2>'
-const div2 = document.createElement('div')
-div2.classList.add('personal-balance-title')
-div2.innerHTML='<div>Participant</div> <div>Must Pay</div> <div>Payed Done</div> <div>Balance</div>'
-const hr = document.createElement('hr')
+// div1.classList.add('head')
+// div1.innerHTML='<h2> Personal Balance </h2>'
+// const div2 = document.createElement('div')
+// div2.classList.add('personal-balance-title')
+// div2.innerHTML='<div>Participant</div> <div>Must Pay</div> <div>Payed Done</div> <div>Balance</div>'
+// const hr = document.createElement('hr')
 
-backBtn.addEventListener('click',()=>{
-    location.href = './billMain.html'
+//creo la interaccion con el muenu desplegable.
+const menuBtn = document.getElementById('menu-button')
+const menu = document.getElementById('menu')
+menuElementContainer= document.getElementById('menu-elements-container')
+menuElementContainer.style.display = 'none'
+
+menuBtn.addEventListener('click',()=>{
+    menu.classList.remove('inactive')
+    menuElementContainer.style.display = 'block'
 })
+menu.addEventListener('mouseleave',()=>{
+    menu.classList.add('inactive')
+    menuElementContainer.style.display = 'none'
+})
+//creo la interaccion con el boton home
+const homeBtn = document.getElementById('home-button')
+homeBtn.addEventListener('click',()=>{
+    location.href = './myBills.html'
+})
+
+
+
+// backBtn.addEventListener('click',()=>{
+//     location.href = './billMain.html'
+// })
 
 
 function showParticipantBalance(participant){
@@ -26,15 +48,16 @@ function showParticipantBalance(participant){
     divParticipant.classList.add('personal-balance-participant')
     divParticipant.innerHTML = `<div>${nameParticipant}</div> <div>$${mustPay.toFixed(2)}</div> <div>$${payed.toFixed(2)}</div>` //recodar que toFixed(), devuelve el float redondeado pero como un string.
     const divPB = document.createElement('div') // divPB = PersonalBalance
+    
     if(balance == 0){
         divPB.innerText = `Settle`
         divParticipant.style.backgroundColor = '#CCCCCC'
         divParticipant.style.color = 'rgb(40,40,40)'
     }else if(balance > 0 ){
-        divPB.innerText = `Recover $${balance.toFixed(2)}`
+        divPB.innerText = `Recover $ ${balance.toFixed(2)}`
         divParticipant.style.backgroundColor = 'rgb(196,215,183)'
     } else if (balance < 0){
-        divPB.innerText = `Owe $${-balance.toFixed(2)}`
+        divPB.innerText = `Owe $ ${-balance.toFixed(2)}`
         divParticipant.style.backgroundColor = 'rgb(234,190,190)'
     }
     divParticipant.appendChild(divPB)

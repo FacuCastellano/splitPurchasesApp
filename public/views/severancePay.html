@@ -6,49 +6,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Split Purchases | Severance Pay</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
-    
+    <script src="https://kit.fontawesome.com/ef08a0a447.js" crossorigin="anonymous"></script>
     <link rel='stylesheet' type="text/css" href='../stylesheets/severancePay.css'/>
    
 
     <!-- <link rel='stylesheet' type="text/css" href='/home/facu/Escritorio/programacion/proyectosPropios/blog/public/stylesheets/userMain.css'/>   -->
 </head>
 <body>
+    <div class="main-container">
 
-
-    <div class="container" id="severance-pay-container">
-        
-        <!-- <div class="head">
-            <h2> Severance Pay </h2>
+        <!-- aca pongo el menu lateral -->
+        <div class="optionsMenu inactive" id="menu">
+            <div class="menu-elements-container" id="menu-elements-container">
+                <div class="menu-item ">Opcion 1</div>
+                <div class="menu-item ">Opcion 2</div>
+                <div class="menu-item ">Opcion ...</div>
+                <div class="menu-item ">Opcion ...</div>
+                <div class="menu-item " id="delete-button">Delete Bill</div>
+            </div>
+            
         </div>
 
-        <div class="severance-pay-title">
-            <div>Debtor</div>
-            <div>Amount</div>
-            <div>Beneficiary</div>
+        <div class="title-container">
+
+            <div class="title-subcontainer-1">
+                <div class="icon-container">
+                    <i class="fa-solid fa-bars" id="menu-button"></i>
+                </div>
+
+                <h2> <var>Personal Balances</var></h2>
+                
+                <div class="icon-container" id="home-button">
+                    <i class="fa-solid fa-house" ></i>
+                </div>
+            </div>
+            <hr>
+            <div>
+            <div class="title-subcontainer-2">
+                <div>Debor</div>
+                <div>Amount</div>
+                <div>Beneficiary</div>
+                <div class="divIcon"></div>
+            </div>
+        </div>
+        <div class="transfer-container" id="trasnfer-container">
+            <!-- esto lo lleno desde JS -->
         </div>
 
-        <hr>
-
-        <div class="severance-pay-row">
-            <div>Deudor </div>
-            <div>Monto </div>
-            <div>Beneficiario</div>
-        </div>
-
-        <div class="severance-pay-row">
-            <div>Deudor </div>
-            <div>Monto </div>
-            <div>Beneficiario</div>
-        </div> -->
-        
     </div>
-
-
-
-
-    <button class="btn-back" type="button" id="back-button" >
-        Back
-    </button>
+    
+    
 
     <script src="../scripts/severancePay.js" ></script>
 </body>

@@ -1,6 +1,6 @@
 :root{
     --body-bg-color: steelblue  ;
-   
+    --maindiv-bg-color: rgb(211, 234, 241) ;
     --botton-bg-color: rgb(211, 234, 241) ;
     --content-bg-color:rgba(0, 0, 0, 0.4) ;
 }
@@ -10,14 +10,14 @@
     box-sizing: border-box;
 }
 
-html{
+/* html{
 
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
 
-}
+} */
 body{
     background-color:var(--body-bg-color);
     display:flex;
@@ -26,7 +26,8 @@ body{
     justify-content: center;
     font-family: 'Roboto',sans-serif;
     color:white;
-    
+    margin:0;
+    margin-top: 50px;
 }
 
 .mainContainer{
@@ -112,20 +113,65 @@ hr{
     border-left-color:var(--body-bg-color);
 }
 
-.optionsMenu{
+/* .optionsMenu{
     background-color: rgb(241, 219, 190);
     height: 250px;
     width:150px;
-    /* z-index: 1; */
+
     position: absolute;
     top:0;
     left:0;
     transition: all 0.3s;
 }
 .optionsMenu.inactive{
-    /* height: 0px; */
+
     width:0px;
+} */
+
+/*menu lateral*/
+.optionsMenu{
+    background-color: var(--botton-bg-color);
+    height: auto;
+    width:150px;
+    position: absolute;
+    top:0;
+    left:0;
+    transition: all 0.3s;
+    /*display:block*/
+    z-index:1;
 }
+.optionsMenu.inactive{
+    width: 0px;
+    position: absolute;
+    /*display: none;*/
+}
+.menu-elements-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid rgb(112, 110, 110);
+}
+
+.menu-item{
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color:var(--botton-bg-color);
+    padding:4px 5px 0px;
+    margin:5px 0px;
+    border:2px solid transparent;
+    cursor:pointer;
+}
+
+.menu-item:hover{
+    color: white;
+    font-weight: 400;
+    background-color:var(--body-bg-color);
+    border:2px solid white;
+}
+
 
 /*estilo de las flechas inactivas.*/
 /*flecha izq*/
