@@ -13,5 +13,7 @@ y ademas pueden crearse "usuarios fantasmas" es decir incluir a personas no regi
 3. En el directorio raiz  ejecutar "npm start"
 4. En el navegador ir al "http://localhost:3000/"
 
-## base de datos con mongoDB
-se debe tener en cuenta que la base de datos es mongoDB y la misma debe estar conectada en "mongodb://127.0.0.1:27017/"
+## Requerimientos
+1. tener instalado "node.js"
+2. tener instalado el manejador de paquetes "npm" de node.js
+3. tener instaldo mongoDB y que la misma este conectada en "mongodb://127.0.0.1:27017/"
