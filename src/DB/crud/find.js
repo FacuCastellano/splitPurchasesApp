@@ -6,21 +6,21 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 
-//esta funcion devuelve true si el usuario existe 
-async function checkUserExistenceByEmail(email){
-    try{
-        
-        const user = await User.findOne({email:email.toLowerCase()})
-        if(user){
-            return true
-        }else{
-            return false
-        }
+    //esta funcion devuelve true si el usuario existe 
+    async function checkUserExistenceByEmail(email){
+        try{
+            
+            const user = await User.findOne({email:email.toLowerCase()})
+            if(user){
+                return true
+            }else{
+                return false
+            }
 
-    }catch(err){
-        return null // si ocurre un error tira null.. no error.
+        }catch(err){
+            return null // si ocurre un error tira null.. no error.
+        }
     }
-}
 
 //esta funcion recibe el email(string) de un usuario y devuelve el ObjectId() del usuario.
 async function getUserObjectIdbyEmail(email){
@@ -343,12 +343,6 @@ async function getBalancesByBillStringId(billStringId){
     }    
 }
 
-
-
-
-
-
-
 module.exports = {
     getUserByObjectId,
     getUserObjectIdbyEmail,
@@ -372,17 +366,3 @@ module.exports = {
     checkAliasAndUserAreNotInBill
 }
 
-
-
-// // getBillsbyUserId("6426fa6505afb8908d7d62df")
-// async function main(){
-//     const a = await getBalancesByBillStringId("642ee90c04fa72677d6a9c29")
-//     console.log("aca va a: ",a)
-//     if(a){
-//         console.log("usuario valido")
-//     }else {
-//         console.log("invitado")
-//     }
-//  }
-
-//  main()

@@ -3,8 +3,11 @@ const jwt = require('jsonwebtoken')
 const {passVerify} = require('./passwordFunctions')
 const {getUserbyEmail} = require('../DB/crud/find')
 
+//const secret = process.env.JWT_SECRET
 
-const secret = process.env.JWT_SECRET
+//no se pq no me lo lee del .env
+const secret = "kFasFd/srS+q*a+sSf+-3*4+1-235AScadwq*-sgfuer+sSf+-3*4+1-2+sSf+-3*4+1-2+sSf+-3*4+1-2+sSf+-3*12348927dasadousadfhdsajksdfhi34yr9w0yf34serry8q4trewaf34-*56/456-*/5t*-y/rt-*h/4-*7h/-*/64*-h/rt*-h/47*-h/rtd*-gth/ert*-uy/e56*-y/gh*-e56/y*-rte/h*-456/7*-4/yhr*-dtjh/45*-7/4-*th/4*-65/345*-t/er*-hgy/435*-6/45*-gh/45*-6/+1-2i/*-3f+a4v+sdDas"
+
 
 
 async function generateAccessToken(usermail,pass){
@@ -40,7 +43,7 @@ async function tokenValidator(token) {
         jwt.verify(token, secret, (err, decoded) => {
           if (err) {
             //console.error('Error al verificar el token');
-            console.log("te deberia devolver null")
+            //console.log("te deberia devolver null")
             reject(err);
           } else {
             //console.log('Token verificado exitosamente');
