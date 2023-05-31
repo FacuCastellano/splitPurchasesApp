@@ -8,10 +8,10 @@ y ademas pueden crearse "usuarios fantasmas" es decir incluir a personas no regi
 
 
 ## pasos para ejectuar el programma
-1.0 Hacer un "git clone  https://github.com/FacuCastellano/splitPurchasesApp"
-1.1 En el directorio raiz  ejecutar "npm install"
-1.2 En el directorio raiz  ejecutar "npm start"
-1.3 En el navegador ir al "http://localhost:3000/"
+1. Hacer un "git clone  https://github.com/FacuCastellano/splitPurchasesApp"
+2. En el directorio raiz  ejecutar "npm install"
+3. En el directorio raiz  ejecutar "npm start"
+4. En el navegador ir al "http://localhost:3000/"
 
 ## base de datos con mongoDB
 se debe tener en cuenta que la base de datos es mongoDB y la misma debe estar conectada en "mongodb://127.0.0.1:27017/"
